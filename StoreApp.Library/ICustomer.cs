@@ -6,6 +6,8 @@ namespace StoreApp.Library
 {
     interface ICustomer
     {
-        string Name { get; }
+        string FirstName { get; }
+
+        string LastName { get; }
     }
 }

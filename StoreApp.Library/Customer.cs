@@ -2,7 +2,12 @@
 
 namespace StoreApp.Library
 {
-    public class Customer
+    public record Customer : ICustomer
     {
+        public string FirstName { get; init; }
+
+        public string LastName { get; init; }
+
+        public Guid ID { get; init; }
     }
 }
