@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp.Console", "StoreApp.Console\StoreApp.Console.csproj", "{E769C1E8-9AB4-4FA9-99EC-1E4D481D7CB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApp.Library", "StoreApp.Library\StoreApp.Library.csproj", "{91A65E46-0F54-4F98-AF7B-B5F1596D5431}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp.Library", "StoreApp.Library\StoreApp.Library.csproj", "{91A65E46-0F54-4F98-AF7B-B5F1596D5431}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApp.Library.Tests", "StoreApp.Library.Tests\StoreApp.Library.Tests.csproj", "{AC213592-ABEF-45C3-B9F0-1CE4B6600D44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp.Library.Tests", "StoreApp.Library.Tests\StoreApp.Library.Tests.csproj", "{AC213592-ABEF-45C3-B9F0-1CE4B6600D44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApp.IO.Terminal", "StoreApp.IO.Terminal\StoreApp.IO.Terminal.csproj", "{6F891505-B00A-4B66-9073-1A215058A665}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E769C1E8-9AB4-4FA9-99EC-1E4D481D7CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E769C1E8-9AB4-4FA9-99EC-1E4D481D7CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E769C1E8-9AB4-4FA9-99EC-1E4D481D7CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E769C1E8-9AB4-4FA9-99EC-1E4D481D7CB5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91A65E46-0F54-4F98-AF7B-B5F1596D5431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{91A65E46-0F54-4F98-AF7B-B5F1596D5431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91A65E46-0F54-4F98-AF7B-B5F1596D5431}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{AC213592-ABEF-45C3-B9F0-1CE4B6600D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC213592-ABEF-45C3-B9F0-1CE4B6600D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC213592-ABEF-45C3-B9F0-1CE4B6600D44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F891505-B00A-4B66-9073-1A215058A665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F891505-B00A-4B66-9073-1A215058A665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F891505-B00A-4B66-9073-1A215058A665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F891505-B00A-4B66-9073-1A215058A665}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

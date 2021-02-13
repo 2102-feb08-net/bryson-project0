@@ -6,6 +6,12 @@ namespace StoreApp.Library
 {
     public interface IOrder
     {
-        decimal Price { get; }
+        ICustomer Customer { get; }
+
+        Location StoreLocation { get; }
+
+        IReadOnlyDictionary<IProduct, int> ProductQuantity { get; }
+    
+        DateTime OrderTime { get; }
     }
 }

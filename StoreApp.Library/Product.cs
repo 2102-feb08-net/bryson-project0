@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreApp.Library
 {
-    public class Product
+    public record Product : IProduct
     {
         public string Name { get; }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StoreApp.Console
+namespace StoreApp.IO.Terminal
 {
     class Program
     {
