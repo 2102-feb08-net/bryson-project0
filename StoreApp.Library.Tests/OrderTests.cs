@@ -6,9 +6,9 @@ namespace StoreApp.Library.Tests
     public class OrderTests
     {
         [Theory]
-        [InlineData(1)]
         [InlineData(2)]
-        [InlineData(15)]
+        [InlineData(Order.MIN_QUANTITY_PER_ORDER)]
+        [InlineData(Order.MAX_QUANTITY_PER_ORDER)]
         public void Order_AddProductToOrderSuccess(int quantity)
         {
             // arrange
@@ -27,9 +27,8 @@ namespace StoreApp.Library.Tests
         }
 
         [Theory]
-        [InlineData(0)]
         [InlineData(-1)]
-        [InlineData(-10)]
+        [InlineData(Order.MIN_QUANTITY_PER_ORDER - 1)]
         public void Order_AddProductQuantityLessThanOne_Fail(int quantity)
         {
             // arrange
@@ -42,6 +41,23 @@ namespace StoreApp.Library.Tests
 
             // assert
             Assert.Throws<ArgumentException>(addToOrder);
+        }
+
+        [Theory]
+        [InlineData(Order.MAX_QUANTITY_PER_ORDER + 1)]
+        [InlineData(100)]
+        public void Order_AddExcessiveProductQuantity_Fail(int quantity)
+        {
+            // arrange
+            ICustomer customer = new Customer();
+            IProduct product = new Product();
+            Order order = new Order(customer);
+
+            // act
+            Action addToOrder = () => order.AddProductToOrder(product, quantity);
+
+            // assert
+            Assert.Throws<ExcessiveOrderException>(addToOrder);
         }
     }
 }

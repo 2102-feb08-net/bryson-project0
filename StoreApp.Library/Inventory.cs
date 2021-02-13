@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public class Location
+    public class Inventory
     {
-        public string Address { get; }
+        public IProduct Product { get; }
 
-
+        public int Quantity { get; }
 
     }
 }

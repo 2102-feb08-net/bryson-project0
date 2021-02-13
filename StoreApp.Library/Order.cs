@@ -7,6 +7,9 @@ namespace StoreApp.Library
 {
     public class Order : IOrder
     {
+        public const int MIN_QUANTITY_PER_ORDER = 1;
+        public const int MAX_QUANTITY_PER_ORDER = 20;
+
         public ICustomer Customer { get; }
 
         public Location StoreLocation { get; }
@@ -15,7 +18,7 @@ namespace StoreApp.Library
         private Dictionary<IProduct, int> _productQuantity = new Dictionary<IProduct, int>();
         public IReadOnlyDictionary<IProduct, int> ProductQuantity => _productQuantity;
 
-        public DateTime OrderTime => throw new NotImplementedException();
+        public DateTime? OrderTime { get; private set; } = null;
 
         public Order(ICustomer customer)
         {
@@ -25,10 +28,19 @@ namespace StoreApp.Library
 
         public void AddProductToOrder(IProduct product, int quantity)
         {
-            if (quantity < 1)
+            if (quantity < MIN_QUANTITY_PER_ORDER)
                 throw new ArgumentException("Quantity must be great than 0 for an order.");
 
+            if (quantity > MAX_QUANTITY_PER_ORDER)
+                throw new ExcessiveOrderException($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order.");
+
             _productQuantity.Add(product, quantity);
+        }
+
+        public void ProcessOrder()
+        {
+
+            OrderTime = DateTime.Now;
         }
     }
 }

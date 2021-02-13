@@ -12,6 +12,6 @@ namespace StoreApp.Library
 
         IReadOnlyDictionary<IProduct, int> ProductQuantity { get; }
     
-        DateTime OrderTime { get; }
+        DateTime? OrderTime { get; }
     }
 }
