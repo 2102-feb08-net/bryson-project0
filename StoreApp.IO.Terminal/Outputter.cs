@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.IO.Terminal
 {
-    class Outputter
+    public class Outputter : IOutputter
     {
+        public void Write(string outputText) => Console.WriteLine(outputText);
+        public void Write() => Console.WriteLine();
     }
 }

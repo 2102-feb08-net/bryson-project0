@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreApp.Library
 {
-    public interface IOrder
+    public interface IOrder : IIdentifiable
     {
         ICustomer Customer { get; }
 
@@ -13,5 +13,9 @@ namespace StoreApp.Library
         IReadOnlyDictionary<IProduct, int> ProductQuantity { get; }
     
         DateTime? OrderTime { get; }
+
+        decimal TotalPrice { get; }
+
+        Guid ID { get; }
     }
 }

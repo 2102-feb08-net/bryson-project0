@@ -9,5 +9,7 @@ namespace StoreApp.Library
         public string Name { get; }
 
         public decimal Price { get; }
+
+        public Guid ProductID { get; }
     }
 }

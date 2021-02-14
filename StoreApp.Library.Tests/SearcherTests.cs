@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreApp.Library.Tests
 {
-    class SearchTests
+    class SearcherTests
     {
 
     }

@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreApp.Library
+namespace StoreApp.IO.Terminal
 {
-    public interface IProduct : IIdentifiable
+    public class Inputter : IInputter
     {
-        string Name { get; }
-
-        decimal Price { get; }
+        public string ReadInput() => Console.ReadLine();
     }
 }
