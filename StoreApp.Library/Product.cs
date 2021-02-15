@@ -6,10 +6,10 @@ namespace StoreApp.Library
 {
     public record Product : IProduct
     {
-        public string Name { get; }
+        public string Name { get; init; }
 
-        public decimal Price { get; }
+        public string Category { get; init; }
 
-        public Guid ProductID { get; }
+        public Guid ID { get; init; }
     }
 }

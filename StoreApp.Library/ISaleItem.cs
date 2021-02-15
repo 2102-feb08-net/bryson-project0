@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public interface IProduct : IIdentifiable
+    public interface ISaleItem
     {
-        string Name { get; }
+        IProduct Product { get; }
 
-        string Category { get; }
+        decimal UnitPrice { get; }
     }
 }

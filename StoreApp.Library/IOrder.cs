@@ -10,12 +10,10 @@ namespace StoreApp.Library
 
         Location StoreLocation { get; }
 
-        IReadOnlyDictionary<IProduct, int> ProductQuantity { get; }
+        IReadOnlyDictionary<ISaleItem, int> ShoppingCartQuantity { get; }
     
-        DateTime? OrderTime { get; }
+        DateTimeOffset? OrderTime { get; }
 
         decimal TotalPrice { get; }
-
-        Guid ID { get; }
     }
 }

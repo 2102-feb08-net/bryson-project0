@@ -9,39 +9,37 @@ namespace StoreApp.IO.Terminal
 {
     public class Searcher
     {
-        IInputter _inputter;
-        IOutputter _outputter;
-
         OrderHistory _history;
         CustomerDatabase _database;
 
-        public Searcher(IInputter inputter, IOutputter outputter, OrderHistory history, CustomerDatabase database)
+        IIOController _io;
+
+        public Searcher(IIOController io, OrderHistory history, CustomerDatabase database)
         {
-            _inputter = inputter;
-            _outputter = outputter;
+            _io = io;
             _history = history;
             _database = database;
         }
 
         public void SearchByCustomer()
         {
-            _outputter.Write("Enter their first name:");
-            string firstName = _inputter.ReadInput();
+            _io.Output.Write("Enter their first name:");
+            string firstName = _io.Input.ReadInput();
 
-            _outputter.Write("Enter their last name:");
-            string lastName = _inputter.ReadInput();
+            _io.Output.Write("Enter their last name:");
+            string lastName = _io.Input.ReadInput();
 
-            List<ICustomer> customers = _database.LookUpCustomer(firstName, lastName);
+            List<Customer> customers = _database.LookUpCustomer(firstName, lastName);
 
             if(customers.Count == 0)
             {
-                _outputter.Write($"No customers found with the name {firstName} {lastName}.");
+                _io.Output.Write($"No customers found with the name {firstName} {lastName}.");
                 return;
             }
 
             if(customers.Count > 1)
             {
-                _outputter.Write($"More than one customer was found with the name {firstName} {lastName}");
+                _io.Output.Write($"More than one customer was found with the name {firstName} {lastName}");
                 return;
             }
 

@@ -8,7 +8,6 @@ namespace StoreApp.Library
 {
     public class OrderProcessor
     {
-
         /// <summary>
         /// 
         /// </summary>

@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace StoreApp.Library
 {
     public class CustomerDatabase
     {
-        private List<ICustomer> _customers = new List<ICustomer>();
-        public List<ICustomer> Customers = new List<ICustomer>();
+        private List<Customer> _customers = new List<Customer>();
+
+        public List<Customer> Customers { get; set; } = new List<Customer>();
 
         public void AddCustomer(string firstName, string lastName)
         {
-            ICustomer customer = new Customer(firstName, lastName, Guid.NewGuid());
-            _customers.Add(customer);
+            Customer customer = new Customer() { FirstName = firstName, LastName = lastName, ID = Guid.NewGuid() };
+            Customers.Add(customer);
         }
 
-        public List<ICustomer> LookUpCustomer(string firstname, string lastName)
+        public List<Customer> LookUpCustomer(string firstname, string lastName)
         {
-            return _customers.FindAll(c => c.FirstName == firstname && c.LastName == lastName);
+            return Customers.FindAll(c => c.FirstName == firstname && c.LastName == lastName);
         }
     }
 }

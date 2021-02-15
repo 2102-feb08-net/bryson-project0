@@ -11,13 +11,11 @@ namespace StoreApp.IO.Terminal
         public List<ChoiceOption> Options { get; private set; }
 
 
-        IOutputter _outputter;
-        IInputter _inputter;
+        IIOController _io;
 
-        public ResponseChoice(IInputter inputter, IOutputter outputter)
+        public ResponseChoice(IIOController io)
         {
-            _outputter = outputter;
-            _inputter = inputter;
+            _io = io;
         }
 
         public void ShowAndInvokeOptions(params ChoiceOption[] options)
@@ -29,10 +27,10 @@ namespace StoreApp.IO.Terminal
 
         public void DisplayOptions()
         {
-            _outputter.Write("Please select one of the following actions:");
+            _io.Output.Write("Please select one of the following actions:");
             for(int i = 0; i < Options.Count; i++)
             {
-                _outputter.Write($"{i + 1}. {Options[i].TextDescription}");
+                _io.Output.Write($"{i + 1}. {Options[i].TextDescription}");
             }
         }
 
@@ -45,7 +43,7 @@ namespace StoreApp.IO.Terminal
                 if (Options.Count < 1)
                     throw new IndexOutOfRangeException("Options must be at least 1");
 
-                if (int.TryParse(_inputter.ReadInput(), out int responseValue))
+                if (int.TryParse(_io.Input.ReadInput(), out int responseValue))
                 {
                     if (responseValue >= 1 && responseValue <= Options.Count)
                         responseIndex = responseValue - 1;
@@ -53,7 +51,7 @@ namespace StoreApp.IO.Terminal
 
                 if (!responseIndex.HasValue)
                 {
-                    _outputter.Write("Input must be a valid option number.");
+                    _io.Output.Write("Input must be a valid option number.");
                     DisplayOptions();
                 }
 
@@ -61,8 +59,7 @@ namespace StoreApp.IO.Terminal
 
             var action = Options[responseIndex.Value].ChoiceAction;
             action.Invoke();
-            _outputter.Write("Press Enter to continue...");
-            _inputter.ReadInput();
+            _io.PressEnterToContinue();
         }
     }
 }

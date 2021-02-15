@@ -2,7 +2,7 @@
 
 namespace StoreApp.Library
 {
-    public record Customer : ICustomer
+    public class Customer : ICustomer
     {
         public string FirstName { get; init; }
 
@@ -19,6 +19,13 @@ namespace StoreApp.Library
         {
             FirstName = firstName ?? throw new NullReferenceException();
             LastName = lastName ?? throw new NullReferenceException();
+
+            if (guid == Guid.Empty)
+                throw new ArgumentException("GUID cannot be 0");
+            
+            ID = guid;
         }
+
+        public Customer() { }
     }
 }

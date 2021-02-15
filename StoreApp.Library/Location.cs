@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public class Location
+    public class Location : IIdentifiable
     {
         public string Address { get; }
 
+        public Dictionary<IProduct, int> Inventory = new Dictionary<IProduct, int>();
 
+
+        public Guid ID { get; }
 
     }
 }

@@ -10,15 +10,15 @@ namespace StoreApp.Library
     {
         List<IOrder> orders = new List<IOrder>();
 
-        public IEnumerable<IOrder> SearchStoreLocation(Location location)
+        public List<IOrder> SearchStoreLocation(Location location)
         {
-            return orders.Where(o => o.StoreLocation == location);
+            return orders.FindAll(o => o.StoreLocation == location);
         }
 
 
-        public IEnumerable<IOrder> SearchByCustomer(ICustomer customer)
+        public List<IOrder> SearchByCustomer(ICustomer customer)
         {
-            return orders.Where(o => o.Customer == customer);
+            return orders.FindAll(o => o.Customer == customer);
         }
 
         public bool TryAddOrderToHistory(IOrder order)

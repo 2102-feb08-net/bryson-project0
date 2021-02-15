@@ -5,8 +5,9 @@ namespace StoreApp.Library.Tests
 {
     public class OrderTests
     {
-        ICustomer customer = new Customer("John", "Doe", new Guid("a79a5d93-c569-49b4-b82d-f2ad980a9041"));
-        IProduct product = new Product();
+        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe", ID = new Guid("a79a5d93-c569-49b4-b82d-f2ad980a9041") };
+        
+        IProduct product = new Product() { Name = "Apple", Category = "Food", ID = new Guid("de7fb190-c4f8-4c0d-89c8-9a60b2da42bf") };
 
         [Theory]
         [InlineData(2)]
@@ -16,12 +17,13 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             Order order = new Order(customer);
+            ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            order.SetProductToOrder(product, quantity);
+            order.SetProductToOrder(saleItem, quantity);
 
             int quantityAdded;
-            bool foundOrder = order.ProductQuantity.TryGetValue(product, out quantityAdded);
+            bool foundOrder = order.ShoppingCartQuantity.TryGetValue(saleItem, out quantityAdded);
 
             // assert
             Assert.True(foundOrder && quantity == quantityAdded);
@@ -35,9 +37,10 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             Order order = new Order(customer);
+            ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            Action addToOrder = () => order.SetProductToOrder(product, quantity);
+            Action addToOrder = () => order.SetProductToOrder(saleItem, quantity);
 
             // assert
             Assert.Throws<ArgumentException>(addToOrder);
@@ -50,9 +53,10 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             Order order = new Order(customer);
+            ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            Action addToOrder = () => order.SetProductToOrder(product, quantity);
+            Action addToOrder = () => order.SetProductToOrder(saleItem, quantity);
 
             // assert
             Assert.Throws<ExcessiveOrderException>(addToOrder);

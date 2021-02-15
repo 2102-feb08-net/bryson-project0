@@ -16,14 +16,14 @@ namespace StoreApp.IO.Terminal
             sb.AppendLine($"======================================================================================");
             sb.AppendLine($" {order.OrderTime} | {order.Customer} | {order.StoreLocation.Address}");
             sb.AppendLine($"======================================================================================");
-            sb.AppendLine($"         Product Name         | Quantity |   Unit Price");
+            sb.AppendLine($"         Product Name         |      Category     | Quantity |   Unit Price");
             sb.AppendLine($"--------------------------------------------------------------------------------------");
             
-            foreach(var pair in order.ProductQuantity)
+            foreach(var pair in order.ShoppingCartQuantity)
             {
-                IProduct product = pair.Key;
+                ISaleItem saleItem = pair.Key;
                 int quantity = pair.Value;
-                sb.AppendLine($"{product.Name.PadRight(30)} | {quantity.ToString().PadRight(8)} | {product.Price}");
+                sb.AppendLine($"{saleItem.Product.Name, -30} | {saleItem.Product.Category,-17} | {quantity,-8} | {saleItem.UnitPrice}");
             }
 
             return sb.ToString();

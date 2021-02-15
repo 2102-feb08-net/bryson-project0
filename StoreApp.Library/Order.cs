@@ -15,35 +15,25 @@ namespace StoreApp.Library
 
         public Location StoreLocation { get; }
 
+        private Dictionary<ISaleItem, int> _shoppingCartQuantity = new Dictionary<ISaleItem, int>();
+        public IReadOnlyDictionary<ISaleItem, int> ShoppingCartQuantity => _shoppingCartQuantity;
 
-        private Dictionary<IProduct, int> _productQuantity = new Dictionary<IProduct, int>();
-        public IReadOnlyDictionary<IProduct, int> ProductQuantity => _productQuantity;
+        public DateTimeOffset? OrderTime { get; private set; } = null;
 
-        public DateTime? OrderTime { get; private set; } = null;
+        public Guid ID { get; }
 
         public decimal TotalPrice
         {
             get
             {
                 decimal total = 0;
-                foreach(var pair in _productQuantity)
+                foreach(var pair in _shoppingCartQuantity)
                 {
-                    IProduct product = pair.Key;
+                    ISaleItem saleItem = pair.Key;
                     int quantity = pair.Value;
-                    total += product.Price * quantity;
+                    total += saleItem.UnitPrice * quantity;
                 }
                 return total;
-            }
-        }
-
-        public Guid ID { get; }
-
-        public bool IsValid
-        {
-            get
-            {
-                return OrderTime != null;
-
             }
         }
 
@@ -53,8 +43,7 @@ namespace StoreApp.Library
             ID = Guid.NewGuid();
         }
 
-
-        public void SetProductToOrder(IProduct product, int quantity)
+        public void SetProductToOrder(ISaleItem saleItem, int quantity)
         {
             if (quantity < MIN_QUANTITY_PER_ORDER)
                 throw new ArgumentException("Quantity must be great than 0 for an order.");
@@ -62,23 +51,28 @@ namespace StoreApp.Library
             if (quantity > MAX_QUANTITY_PER_ORDER)
                 throw new ExcessiveOrderException($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order.");
 
-            _productQuantity[product] = quantity;
+            _shoppingCartQuantity[saleItem] = quantity;
+        }
+
+        public void AddProductToOrder(ISaleItem saleItem)
+        {
+
+            if (_shoppingCartQuantity.ContainsKey(saleItem))
+            {
+                int quantity = _shoppingCartQuantity[saleItem];
+
+                if (quantity + 1 > MAX_QUANTITY_PER_ORDER)
+                    throw new ExcessiveOrderException($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order.");
+
+                _shoppingCartQuantity[saleItem]++;
+            }
+            else
+                _shoppingCartQuantity.Add(saleItem, 1);
         }
 
         public void ProcessOrder()
         {
-
             OrderTime = DateTime.Now;
         }
-
-        void Validate()
-        {
-            foreach(var pair in _productQuantity)
-            {
-                
-            }
-        }
-
-
     }
 }

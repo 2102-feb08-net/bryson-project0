@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using StoreApp.Library;
 
 namespace StoreApp.IO.Terminal
@@ -7,42 +8,49 @@ namespace StoreApp.IO.Terminal
     {
         static ResponseChoice response;
 
-        static IOutputter outputter = new Outputter();
-        static IInputter inputter = new Inputter();
+        static IIOController io = new IOController(new Inputter(), new Outputter());
+
+        static Serializer serializer = new Serializer();
 
         static CustomerDatabase database = new CustomerDatabase();
 
-        static void Main(string[] args)
-        {
-            ChoiceOption search = new ("Search Database", Search);
-            ChoiceOption addCustomer = new ("Add Customer", AddCustomer);
-            ChoiceOption placeOrder = new("Place Order", PlaceOrder);
-            ChoiceOption returnToMain = new("Return to main menu", MainMenu);
-            ChoiceOption quit = new ChoiceOption("Quit", Quit);
+        const string CUSTOMER_DATABASE_PATH = "customers.json";
 
-            response = new ResponseChoice(inputter, outputter);
+
+        static async Task Main(string[] args)
+        {
+            await LoadDatabases();
+
+            response = new ResponseChoice(io);
 
             MainMenu();
         }
 
+        static async Task LoadDatabases()
+        {
+            io.Output.Write("Loading databases...");
+            database = await serializer.DeserializeAsync<CustomerDatabase>(CUSTOMER_DATABASE_PATH);
+            io.Output.Write("Finished loading databases...");
+            io.Output.Write();
+        }
 
         static void MainMenu()
         {
+            ChoiceOption placeOrder = new("Place Order", PlaceOrder);
             ChoiceOption search = new("Search Database", Search);
             ChoiceOption addCustomer = new("Add Customer", AddCustomer);
-            ChoiceOption placeOrder = new("Place Order", PlaceOrder);
             ChoiceOption quit = new ChoiceOption("Quit", Quit);
 
-            outputter.Write("Welcome to the store!");
+            io.Output.Write("Welcome to the store!");
 
-            response.ShowAndInvokeOptions(search, addCustomer, placeOrder, quit);
+            response.ShowAndInvokeOptions(placeOrder, search, addCustomer, quit);
         }
 
         static void Search()
         {
-            outputter.Write("Entering Search...");
+            io.Output.Write("Entering Search...");
             OrderHistory history = new OrderHistory();
-            Searcher searcher = new Searcher(inputter, outputter, history, database);
+            Searcher searcher = new Searcher(io, history, database);
 
             ChoiceOption searchByCustomer = new("Search by Customer", searcher.SearchByCustomer);
             ChoiceOption searchByLocation = new("Search by Location", searcher.SearchByLocation);
@@ -54,13 +62,17 @@ namespace StoreApp.IO.Terminal
 
         static void AddCustomer()
         {
-            outputter.Write("Enter their first name:");
-            string firstName = inputter.ReadInput();
-            outputter.Write("Enter their last name:");
-            string lastName = inputter.ReadInput();
+            io.Output.Write("Enter their first name:");
+            string firstName = io.Input.ReadInput();
+            io.Output.Write("Enter their last name:");
+            string lastName = io.Input.ReadInput();
 
             database.AddCustomer(firstName, lastName);
-            outputter.Write($"'{firstName} {lastName}' has been added to the database.");
+            io.Output.Write("Adding customer...");
+            serializer.SerializeAsync(database, CUSTOMER_DATABASE_PATH).GetAwaiter().GetResult();
+            io.Output.Write($"'{firstName} {lastName}' has been added to the database.");
+            io.PressEnterToContinue();
+
             MainMenu();
         }
 
