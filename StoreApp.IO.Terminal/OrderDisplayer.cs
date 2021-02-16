@@ -36,5 +36,13 @@ namespace StoreApp.IO.Terminal
 
             return sb.ToString();
         }
+
+        public IEnumerable<string> GetBatchOrderDisplay(List<IOrder> orders)
+        {
+            foreach(var order in orders)
+            {
+                yield return GetOrderDisplay(order);
+            }
+        }
     }
 }

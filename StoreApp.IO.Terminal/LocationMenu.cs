@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreApp.Library
+namespace StoreApp.IO.Terminal
 {
-    public class Inventory
+    class LocationMenu
     {
-        public IProduct Product { get; }
-
-        public int Quantity { get; }
-
     }
 }

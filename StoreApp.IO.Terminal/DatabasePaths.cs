@@ -9,5 +9,7 @@ namespace StoreApp.IO.Terminal
     public static class DatabasePaths
     {
         public const string CUSTOMER_DATABASE_PATH = "customers.json";
+
+        public const string LOCATIONS_DATABASE_PATH = "locations.json";
     }
 }

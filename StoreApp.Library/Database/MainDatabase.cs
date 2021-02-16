@@ -10,7 +10,6 @@ namespace StoreApp.Library
     {
         public CustomerDatabase CustomerDatabase { get; set; } = new CustomerDatabase();
 
-
-
+        public OrderHistory OrderHistory { get; set; } = new OrderHistory();
     }
 }

@@ -34,8 +34,7 @@ namespace StoreApp.IO.Terminal
         void Search()
         {
             _io.Output.Write("Entering Search...");
-            OrderHistory history = new OrderHistory();
-            SearchMenu search = new SearchMenu(_io, this, history, _mainDatabase.CustomerDatabase);
+            SearchMenu search = new SearchMenu(_io, this, _mainDatabase);
             search.Open();
         }
 

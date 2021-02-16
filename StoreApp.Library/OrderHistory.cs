@@ -5,13 +5,12 @@ namespace StoreApp.Library
 {
     public class OrderHistory
     {
-        List<IOrder> orders = new List<IOrder>();
+        List<IOrder> orders { get; set; } = new List<IOrder>();
 
         public List<IOrder> SearchStoreLocation(Location location)
         {
             return orders.FindAll(o => o.StoreLocation == location);
         }
-
 
         public List<IOrder> SearchByCustomer(ICustomer customer)
         {
