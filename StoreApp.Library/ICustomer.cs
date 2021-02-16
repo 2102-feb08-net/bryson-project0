@@ -9,5 +9,7 @@ namespace StoreApp.Library
         string FirstName { get; }
 
         string LastName { get; }
+
+        string DisplayName() => $"{FirstName} {LastName}";
     }
 }

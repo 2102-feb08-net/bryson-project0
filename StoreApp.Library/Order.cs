@@ -22,6 +22,8 @@ namespace StoreApp.Library
 
         public Guid ID { get; }
 
+        public OrderState State { get; private set; }
+
         public decimal TotalPrice
         {
             get
@@ -41,6 +43,7 @@ namespace StoreApp.Library
         {
             Customer = customer ?? throw new NullReferenceException();
             ID = Guid.NewGuid();
+            State = OrderState.BeingBuilt;
         }
 
         public void SetProductToOrder(ISaleItem saleItem, int quantity)
@@ -73,6 +76,7 @@ namespace StoreApp.Library
         public void ProcessOrder()
         {
             OrderTime = DateTime.Now;
+            State = OrderState.Processed;
         }
     }
 }

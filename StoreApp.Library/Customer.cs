@@ -2,7 +2,7 @@
 
 namespace StoreApp.Library
 {
-    public class Customer : ICustomer
+    public record Customer : ICustomer
     {
         public string FirstName { get; init; }
 

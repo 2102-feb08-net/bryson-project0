@@ -8,39 +8,54 @@ namespace StoreApp.IO.Terminal
 {
     public class ResponseChoice
     {
-        public List<ChoiceOption> Options { get; private set; }
+        public List<ChoiceOption> Options { get; private set; } = new List<ChoiceOption>();
 
+        private ChoiceOption[] _currentOptions;
 
         IIOController _io;
 
-        public ResponseChoice(IIOController io)
+        private bool _waitForEnterKeyAfterResponse;
+
+        /// <summary>
+        /// Creates a new ResponseChoice object
+        /// </summary>
+        /// <param name="io">The IO Controller used for input and output</param>
+        /// <param name="waitForEnterKeyAfterResponse">Should the user be prompted to press enter again after the choice is finished executing?</param>
+        public ResponseChoice(IIOController io, bool waitForEnterKeyAfterResponse = true)
         {
             _io = io;
+            _waitForEnterKeyAfterResponse = waitForEnterKeyAfterResponse;
         }
 
+        /// <summary>
+        /// Displays all of the options set in the Options list then prompts the user to select one of them.
+        /// </summary>
+        /// <param name="options">The options that the user can choose</param>
         public void ShowAndInvokeOptions(params ChoiceOption[] options)
         {
-            Options = new List<ChoiceOption>(options);
+            _currentOptions = new ChoiceOption[Options.Count];
+            Options.CopyTo(_currentOptions);
+
             DisplayOptions();
             InvokeChoice();
         }
 
-        public void DisplayOptions()
+        private void DisplayOptions()
         {
             _io.Output.Write("Please select one of the following actions:");
-            for(int i = 0; i < Options.Count; i++)
+            for(int i = 0; i < _currentOptions.Length; i++)
             {
-                _io.Output.Write($"{i + 1}. {Options[i].TextDescription}");
+                _io.Output.Write($"{i + 1}. {_currentOptions[i].TextDescription}");
             }
         }
 
-        public void InvokeChoice()
+        private void InvokeChoice()
         {
             int? responseIndex = null;
 
             do
             {
-                if (Options.Count < 1)
+                if (_currentOptions.Length < 1)
                     throw new IndexOutOfRangeException("Options must be at least 1");
 
                 if (int.TryParse(_io.Input.ReadInput(), out int responseValue))
@@ -57,9 +72,11 @@ namespace StoreApp.IO.Terminal
 
             } while (!responseIndex.HasValue);
 
-            var action = Options[responseIndex.Value].ChoiceAction;
-            action.Invoke();
-            _io.PressEnterToContinue();
+            var action = _currentOptions[responseIndex.Value].ChoiceAction;
+            action?.Invoke();
+
+            if(_waitForEnterKeyAfterResponse)
+                _io.PressEnterToContinue();
         }
     }
 }

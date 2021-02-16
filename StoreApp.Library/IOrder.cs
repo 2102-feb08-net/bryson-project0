@@ -15,5 +15,9 @@ namespace StoreApp.Library
         DateTimeOffset? OrderTime { get; }
 
         decimal TotalPrice { get; }
+
+        OrderState State { get; }
+
+        void ProcessOrder();
     }
 }

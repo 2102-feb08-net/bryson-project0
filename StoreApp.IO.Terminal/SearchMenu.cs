@@ -7,21 +7,27 @@ using StoreApp.Library;
 
 namespace StoreApp.IO.Terminal
 {
-    public class Searcher
+    public class SearchMenu : Menu
     {
         OrderHistory _history;
         CustomerDatabase _database;
 
-        IIOController _io;
-
-        public Searcher(IIOController io, OrderHistory history, CustomerDatabase database)
+        public SearchMenu(IIOController io, Menu previousMenu, OrderHistory history, CustomerDatabase database) : base(io, previousMenu)
         {
-            _io = io;
             _history = history;
             _database = database;
         }
 
-        public void SearchByCustomer()
+        public override void Open()
+        {
+            ResponseChoice response = new ResponseChoice(_io);
+            response.Options.Add(new ChoiceOption("Search by Customer", SearchByCustomer));
+            response.Options.Add(new ChoiceOption("Search by Location", SearchByLocation));
+            response.Options.Add(new ChoiceOption("Go Back", ReturnToPreviousMenu));
+            response.ShowAndInvokeOptions();
+        }
+
+        private void SearchByCustomer()
         {
             _io.Output.Write("Enter their first name:");
             string firstName = _io.Input.ReadInput();
@@ -46,7 +52,7 @@ namespace StoreApp.IO.Terminal
             _history.SearchByCustomer(customers[0]);
         }
 
-        public void SearchByLocation()
+        private void SearchByLocation()
         {
 
         }

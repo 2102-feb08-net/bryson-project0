@@ -8,7 +8,7 @@ using System.IO;
 
 namespace StoreApp.Library
 {
-    public class Serializer
+    public static class Serializer
     {
         /// <summary>
         /// Serializes the object to the specified path as a JSON file.
@@ -17,14 +17,13 @@ namespace StoreApp.Library
         /// <param name="data"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public async Task SerializeAsync<T>(T data, string fileName)
+        public static async Task SerializeAsync<T>(T data, string fileName)
         {
             //using Stream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
             JsonSerializerOptions options = new JsonSerializerOptions();
-            //options.IncludeFields = true;
+            options.WriteIndented = true;
             string json = JsonSerializer.Serialize(data, options);
-            await File.WriteAllTextAsync(fileName, json);
-            
+            await File.WriteAllTextAsync(fileName, json);   
         }
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace StoreApp.Library
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName"></param>
         /// <returns>Returns the deserialized object or creates a new object if the file does not exist. </returns>
-        public async Task<T> DeserializeAsync<T>(string fileName) where T : new()
+        public static async Task<T> DeserializeAsync<T>(string fileName) where T : new()
         {
             if (!File.Exists(fileName))
                 return new();
@@ -44,14 +43,20 @@ namespace StoreApp.Library
             //options.IncludeFields = true;
 
             string json = await File.ReadAllTextAsync(fileName);
-            T obj = JsonSerializer.Deserialize<T>(json, options);
 
-            if(obj == null)
+            try
             {
-                throw new NullReferenceException("Could not parse JSON data.");
+                T obj = JsonSerializer.Deserialize<T>(json, options);
+                return obj;
             }
-
-            return obj;
+            catch (JsonException e)
+            {
+                string newFilePath = $"{fileName}_{DateTime.Now.Ticks}.corruptbackup";
+                Console.WriteLine($"Failed to deserialize data: {e.Message}.");
+                Console.WriteLine($"Copying data to {newFilePath} as a backup to prevent overriding.");
+                File.WriteAllText(newFilePath, json);
+                return new();
+            }
         }
     }
 }

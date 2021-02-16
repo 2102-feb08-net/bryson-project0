@@ -23,6 +23,5 @@ namespace StoreApp.IO.Terminal
             Output.Write("Press Enter to continue...");
             Input.ReadInput();
         }
-
     }
 }

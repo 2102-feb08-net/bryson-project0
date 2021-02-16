@@ -14,7 +14,7 @@ namespace StoreApp.IO.Terminal
         public ChoiceOption(string description, Action action)
         {
             TextDescription = description;
-            ChoiceAction = action ?? throw new NullReferenceException("Every choice must have an action.");
+            ChoiceAction = action;
         }
     }
 }
