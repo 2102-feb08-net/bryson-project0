@@ -13,10 +13,9 @@ namespace StoreApp.Library
         /// <summary>
         /// Serializes the object to the specified path as a JSON file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of the object you are serializing</typeparam>
+        /// <param name="data">The data you are serializing</param>
+        /// <param name="fileName">The file name where you wish to serialize the object</param>
         public static async Task SerializeAsync<T>(T data, string fileName)
         {
             //using Stream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
@@ -29,8 +28,8 @@ namespace StoreApp.Library
         /// <summary>
         /// Deserializes the object at the specified path using JSON.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="fileName"></param>
+        /// <typeparam name="T">The type of the object you are deserializing</typeparam>
+        /// <param name="fileName">The file name of the serialized object</param>
         /// <returns>Returns the deserialized object or creates a new object if the file does not exist. </returns>
         public static async Task<T> DeserializeAsync<T>(string fileName) where T : new()
         {

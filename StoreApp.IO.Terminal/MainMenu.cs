@@ -28,6 +28,7 @@ namespace StoreApp.IO.Terminal
                 response.Options.Add(new ChoiceOption("Add Customer", AddCustomer));
                 response.Options.Add(new ChoiceOption("Quit", Quit));
                 response.ShowAndInvokeOptions();
+                _io.PressEnterToContinue();
             }
         }
 

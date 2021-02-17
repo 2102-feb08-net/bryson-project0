@@ -59,7 +59,7 @@ namespace StoreApp.IO.Terminal
 
                 if (customer == null)
                 {
-                    ResponseChoice response = new ResponseChoice(_io, waitForEnterKeyAfterResponse: false);
+                    ResponseChoice response = new ResponseChoice(_io);
                     response.Options.Add(new ChoiceOption("Try again with a different customer", () => tryAgain = true));
                     response.Options.Add(new ChoiceOption("Cancel order", null));
                     response.ShowAndInvokeOptions();

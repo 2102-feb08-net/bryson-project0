@@ -74,9 +74,6 @@ namespace StoreApp.IO.Terminal
 
             var action = _currentOptions[responseIndex.Value].ChoiceAction;
             action?.Invoke();
-
-            if(_waitForEnterKeyAfterResponse)
-                _io.PressEnterToContinue();
         }
     }
 }
