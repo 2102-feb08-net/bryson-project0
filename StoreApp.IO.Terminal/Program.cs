@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using StoreApp.Library;
+using StoreApp.Serialization;
 
 namespace StoreApp.IO.Terminal
 {

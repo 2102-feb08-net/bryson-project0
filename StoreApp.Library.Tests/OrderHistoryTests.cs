@@ -9,22 +9,21 @@ namespace StoreApp.Library.Tests
 {
     public class OrderHistoryTests
     {
-        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe", ID = new Guid("a79a5d93-c569-49b4-b82d-f2ad980a9041") };
-        
+        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe"};
+        Location location = new Location();
 
         [Fact]
         public void OrderHistory_AddOrderToHistory_Successful()
         {
             // arrange
             OrderHistory history = new OrderHistory();
-            IOrder order = new Order(customer);
+            IOrder order = new Order(customer, location);
 
             // act
             history.TryAddOrderToHistory(order);
 
             // assert
             Assert.Contains(order, history.SearchByCustomer(customer));
-
         }
 
         [Fact]
@@ -32,7 +31,7 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             OrderHistory history = new OrderHistory();
-            IOrder order = new Order(customer);
+            IOrder order = new Order(customer, location);
 
             // act
             history.TryAddOrderToHistory(order);
@@ -48,7 +47,7 @@ namespace StoreApp.Library.Tests
             // arrange
             OrderHistory history = new OrderHistory();
             List<IOrder> orders = new List<IOrder>( new Order[] {
-                 new Order(customer)
+                 new Order(customer, location)
             });
 
             foreach(var order in orders)

@@ -27,8 +27,7 @@ namespace StoreApp.IO.Terminal
 
             if (customers.Count > 1)
             {
-                io.Output.Write($"More than one customer was found with the name {firstName} {lastName}. Which customer GUID do you want?");
-                throw new NotImplementedException();
+                io.Output.Write($"More than one customer was found with the name {firstName} {lastName}. Returning first one found.");
             }
 
             return customers[0];

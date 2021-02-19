@@ -39,9 +39,10 @@ namespace StoreApp.Library
             }
         }
 
-        public Order(ICustomer customer)
+        public Order(ICustomer customer, Location storeLocation)
         {
             Customer = customer ?? throw new NullReferenceException();
+            StoreLocation = storeLocation ?? throw new NullReferenceException();
             ID = Guid.NewGuid();
             State = OrderState.BeingBuilt;
         }

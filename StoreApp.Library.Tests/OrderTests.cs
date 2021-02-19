@@ -5,9 +5,48 @@ namespace StoreApp.Library.Tests
 {
     public class OrderTests
     {
-        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe", ID = new Guid("a79a5d93-c569-49b4-b82d-f2ad980a9041") };
+        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
         
-        IProduct product = new Product() { Name = "Apple", Category = "Food", ID = new Guid("de7fb190-c4f8-4c0d-89c8-9a60b2da42bf") };
+        IProduct product = new Product() { Name = "Apple", Category = "Food"};
+
+        Location location = new Location();
+
+
+        [Fact]
+        public void Order_Constructor_Success()
+        {
+            // arrange
+
+            // act
+            Order order = new Order(customer, location);
+
+            // assert
+            Assert.NotNull(order);
+        }
+
+        [Fact]
+        public void Order_NullCustomer_Fail()
+        {
+            // arrange
+
+            // act
+            Action constructor = () => new Order(null, location);
+
+            // assert
+            Assert.Throws<NullReferenceException>(constructor);
+        }
+
+        [Fact]
+        public void Order_NullLocation_Fail()
+        {
+            // arrange
+
+            // act
+            Action constructor = () => new Order(customer, null);
+
+            // assert
+            Assert.Throws<NullReferenceException>(constructor);
+        }
 
         [Theory]
         [InlineData(2)]
@@ -16,7 +55,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddProductToOrder_Success(int quantity)
         {
             // arrange
-            Order order = new Order(customer);
+            Order order = new Order(customer, location);
             ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
@@ -36,7 +75,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddProductQuantityLessThanOne_Fail(int quantity)
         {
             // arrange
-            Order order = new Order(customer);
+            Order order = new Order(customer, location);
             ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
@@ -52,7 +91,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddExcessiveProductQuantity_Fail(int quantity)
         {
             // arrange
-            Order order = new Order(customer);
+            Order order = new Order(customer, location);
             ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act

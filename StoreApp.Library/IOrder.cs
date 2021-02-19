@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreApp.Library
 {
-    public interface IOrder : IIdentifiable
+    public interface IOrder
     {
         ICustomer Customer { get; }
 
@@ -17,6 +17,8 @@ namespace StoreApp.Library
         decimal TotalPrice { get; }
 
         OrderState State { get; }
+
+        Guid ID { get; }
 
         void ProcessOrder();
     }

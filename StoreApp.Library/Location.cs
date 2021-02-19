@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public class Location : IIdentifiable
+    public class Location
     {
         public string Name { get; }
-
         public string Address { get; }
 
         public Dictionary<IProduct, int> Inventory = new Dictionary<IProduct, int>();
-
-        public Guid ID { get; }
 
         /// <summary>
         /// Checks whether there is available stock of said product and quantity.

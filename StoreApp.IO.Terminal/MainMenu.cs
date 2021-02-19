@@ -1,4 +1,5 @@
 ﻿using StoreApp.Library;
+using StoreApp.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace StoreApp.IO.Terminal
             _io.Output.Write("Enter their last name:");
             string lastName = _io.Input.ReadInput();
 
-            _mainDatabase.CustomerDatabase.AddCustomer(firstName, lastName);
+            _mainDatabase.CustomerDatabase.Customers.Add(new Customer(firstName, lastName));
             _io.Output.Write("Adding customer...");
             Serializer.SerializeAsync(_mainDatabase.CustomerDatabase, DatabasePaths.CUSTOMER_DATABASE_PATH).GetAwaiter().GetResult();
             _io.Output.Write($"'{firstName} {lastName}' has been added to the database.");
@@ -54,7 +55,7 @@ namespace StoreApp.IO.Terminal
 
         void PlaceOrder()
         {
-            OrderMenu order = new OrderMenu(_io, this, _mainDatabase.CustomerDatabase);
+            OrderMenu order = new OrderMenu(_io, this, _mainDatabase);
             order.Open();
         }
 

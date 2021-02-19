@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreApp.Library
 {
-    public interface ICustomer : IIdentifiable
+    public interface ICustomer
     {
         string FirstName { get; }
 

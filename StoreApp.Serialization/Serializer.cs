@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.IO;
 
-namespace StoreApp.Library
+namespace StoreApp.Serialization
 {
     public static class Serializer
     {

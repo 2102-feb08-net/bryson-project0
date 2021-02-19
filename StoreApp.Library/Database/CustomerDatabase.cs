@@ -5,18 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
+using StoreApp.Library.Serializable;
 
 namespace StoreApp.Library
 {
     public class CustomerDatabase
     {
         public List<Customer> Customers { get; set; } = new List<Customer>();
-
-        public void AddCustomer(string firstName, string lastName)
-        {
-            Customer customer = new Customer() { FirstName = firstName, LastName = lastName, ID = Guid.NewGuid() };
-            Customers.Add(customer);
-        }
 
         /// <summary>
         /// Finds the customers in the database with the same first and last name.

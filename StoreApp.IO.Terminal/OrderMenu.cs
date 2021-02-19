@@ -12,9 +12,9 @@ namespace StoreApp.IO.Terminal
     {
         private IOrder _currentOrder;
 
-        CustomerDatabase _database;
+        MainDatabase _database;
 
-        public OrderMenu(IIOController io, Menu previousMenu, CustomerDatabase database) : base(io, previousMenu) 
+        public OrderMenu(IIOController io, Menu previousMenu, MainDatabase database) : base(io, previousMenu) 
         {
             _database = database;
         }
@@ -32,7 +32,10 @@ namespace StoreApp.IO.Terminal
             if(!TryAddCustomerToNewOrder(out Customer customer))
                 return;
 
-            _currentOrder = new Order(customer);
+            if (!TryAddLocationToOrder(out Location location))
+                return;
+
+            _currentOrder = new Order(customer, location);
 
             while (buildingOrder)
             {
@@ -55,19 +58,40 @@ namespace StoreApp.IO.Terminal
 
                 _io.Output.Write("Please select a customer to order as.");
 
-                customer = CustomerMenuHelper.LookUpCustomer(_io, _database);
+                customer = CustomerMenuHelper.LookUpCustomer(_io, _database.CustomerDatabase);
 
                 if (customer == null)
-                {
-                    ResponseChoice response = new ResponseChoice(_io);
-                    response.Options.Add(new ChoiceOption("Try again with a different customer", () => tryAgain = true));
-                    response.Options.Add(new ChoiceOption("Cancel order", null));
-                    response.ShowAndInvokeOptions();
-                }
+                    TryAgain(() => tryAgain = true);
 
             } while (tryAgain);
 
             return customer != null;
+        }
+
+        private bool TryAddLocationToOrder(out Location location)
+        {
+            bool tryAgain;
+
+            do
+            {
+                tryAgain = false;
+
+                location = LocationMenuHelper.LookUpLocation(_io, _database.LocationDatabase);
+
+                if(location == null)
+                    TryAgain(() => tryAgain = true);
+
+            } while (tryAgain);
+
+            return location != null;
+        }
+
+        private void TryAgain(Action tryAgain)
+        {
+            ResponseChoice response = new ResponseChoice(_io);
+            response.Options.Add(new ChoiceOption("Try again with different values", tryAgain));
+            response.Options.Add(new ChoiceOption("Cancel order", null));
+            response.ShowAndInvokeOptions();
         }
 
         private void AddNewProductToOrder()
@@ -79,6 +103,7 @@ namespace StoreApp.IO.Terminal
         private void CancelOrder()
         {
             buildingOrder = false;
+            _io.Output.Write("Order canceled.");
         }
 
         private void CheckStatus()

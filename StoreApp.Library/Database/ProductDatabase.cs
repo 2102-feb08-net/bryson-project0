@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public interface IProduct
+    public class ProductDatabase
     {
-        string Name { get; }
+        public List<Product> Products { get; set; } = new List<Product>();
 
-        string Category { get; }
     }
 }

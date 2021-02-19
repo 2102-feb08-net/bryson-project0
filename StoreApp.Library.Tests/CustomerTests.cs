@@ -3,7 +3,8 @@ using Xunit;
 
 namespace StoreApp.Library.Tests
 {
-    class CustomerTests
+    public class CustomerTests
     {
+
     }
 }

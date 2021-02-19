@@ -14,17 +14,14 @@ namespace StoreApp.IO.Terminal
 
         IIOController _io;
 
-        private bool _waitForEnterKeyAfterResponse;
-
         /// <summary>
         /// Creates a new ResponseChoice object
         /// </summary>
         /// <param name="io">The IO Controller used for input and output</param>
         /// <param name="waitForEnterKeyAfterResponse">Should the user be prompted to press enter again after the choice is finished executing?</param>
-        public ResponseChoice(IIOController io, bool waitForEnterKeyAfterResponse = true)
+        public ResponseChoice(IIOController io)
         {
             _io = io;
-            _waitForEnterKeyAfterResponse = waitForEnterKeyAfterResponse;
         }
 
         /// <summary>

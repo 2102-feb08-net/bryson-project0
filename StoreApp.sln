@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApp.Library.Tests", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApp.IO.Terminal", "StoreApp.IO.Terminal\StoreApp.IO.Terminal.csproj", "{6F891505-B00A-4B66-9073-1A215058A665}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreApp.Serialization", "StoreApp.Serialization\StoreApp.Serialization.csproj", "{2495E729-3880-49EB-B65A-D32F1E0A53E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp.DataAccess", "StoreApp.DataAccess\StoreApp.DataAccess.csproj", "{3F670BCF-8DE6-4CBD-BB8D-F8683C5B7BED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6F891505-B00A-4B66-9073-1A215058A665}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F891505-B00A-4B66-9073-1A215058A665}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F891505-B00A-4B66-9073-1A215058A665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2495E729-3880-49EB-B65A-D32F1E0A53E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2495E729-3880-49EB-B65A-D32F1E0A53E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2495E729-3880-49EB-B65A-D32F1E0A53E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2495E729-3880-49EB-B65A-D32F1E0A53E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F670BCF-8DE6-4CBD-BB8D-F8683C5B7BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F670BCF-8DE6-4CBD-BB8D-F8683C5B7BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F670BCF-8DE6-4CBD-BB8D-F8683C5B7BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F670BCF-8DE6-4CBD-BB8D-F8683C5B7BED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

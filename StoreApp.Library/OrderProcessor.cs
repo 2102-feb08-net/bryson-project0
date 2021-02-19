@@ -17,6 +17,5 @@ namespace StoreApp.Library
         {
             return false;
         }
-
     }
 }
