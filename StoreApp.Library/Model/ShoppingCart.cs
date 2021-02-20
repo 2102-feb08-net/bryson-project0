@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public class ProductDatabase
+    public class ShoppingCart
     {
-        public List<ProductData> Products { get; set; } = new List<ProductData>();
-
     }
 }

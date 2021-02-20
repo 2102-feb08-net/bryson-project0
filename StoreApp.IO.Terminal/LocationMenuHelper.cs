@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library;
+using StoreApp.Library.Model;
 
 namespace StoreApp.IO.Terminal
 {
@@ -14,7 +15,7 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Enter the name of the location:");
             string locationName = io.Input.ReadInput();
 
-            List<Location> locations = database.LookUp(locationName);
+            List<Location> locations = database.Locations;
 
             if (locations.Count == 0)
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library;
+using StoreApp.Library.Model;
 
 namespace StoreApp.IO.Terminal
 {

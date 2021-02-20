@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StoreApp.Library.Model;
 
 namespace StoreApp.Library.Serializable
 {
@@ -15,15 +16,16 @@ namespace StoreApp.Library.Serializable
     {
         public static SerializableCustomers ExportToSerializable(this CustomerDatabase database)
         {
-            SerializableCustomers serializable = new SerializableCustomers();
-            serializable.Customers = new List<Customer>(database.Customers);
+            SerializableCustomers serializable = new SerializableCustomers
+            {
+                Customers = new List<Customer>(database.Customers)
+            };
 
             return serializable;
         }
 
         public static void ImportFromSerializable(this CustomerDatabase database, SerializableCustomers customers)
         {
-            
         }
     }
 }

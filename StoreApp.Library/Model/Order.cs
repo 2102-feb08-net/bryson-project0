@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace StoreApp.Library
+namespace StoreApp.Library.Model
 {
     public class Order : IOrder
     {
@@ -15,12 +15,12 @@ namespace StoreApp.Library
 
         public Location StoreLocation { get; }
 
-        private Dictionary<ISaleItem, int> _shoppingCartQuantity = new Dictionary<ISaleItem, int>();
+        readonly private Dictionary<ISaleItem, int> _shoppingCartQuantity = new Dictionary<ISaleItem, int>();
         public IReadOnlyDictionary<ISaleItem, int> ShoppingCartQuantity => _shoppingCartQuantity;
 
         public DateTimeOffset? OrderTime { get; private set; } = null;
 
-        public Guid ID { get; }
+        public Guid Id { get; }
 
         public OrderState State { get; private set; }
 
@@ -29,7 +29,7 @@ namespace StoreApp.Library
             get
             {
                 decimal total = 0;
-                foreach(var pair in _shoppingCartQuantity)
+                foreach (var pair in _shoppingCartQuantity)
                 {
                     ISaleItem saleItem = pair.Key;
                     int quantity = pair.Value;
@@ -43,7 +43,7 @@ namespace StoreApp.Library
         {
             Customer = customer ?? throw new NullReferenceException();
             StoreLocation = storeLocation ?? throw new NullReferenceException();
-            ID = Guid.NewGuid();
+            Id = Guid.NewGuid();
             State = OrderState.BeingBuilt;
         }
 
@@ -60,7 +60,6 @@ namespace StoreApp.Library
 
         public void AddProductToOrder(ISaleItem saleItem)
         {
-
             if (_shoppingCartQuantity.ContainsKey(saleItem))
             {
                 int quantity = _shoppingCartQuantity[saleItem];

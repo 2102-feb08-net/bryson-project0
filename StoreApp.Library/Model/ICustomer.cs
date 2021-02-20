@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StoreApp.Library
+namespace StoreApp.Library.Model
 {
-    public interface ICustomer
+    public interface ICustomer : IIdentifiable
     {
         string FirstName { get; }
 

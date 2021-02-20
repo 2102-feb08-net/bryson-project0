@@ -1,16 +1,19 @@
-﻿using System;
+﻿using StoreApp.Library.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
+using StoreApp.Library.Model;
+
 namespace StoreApp.Library.Tests
 {
     public class OrderHistoryTests
     {
-        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe"};
-        Location location = new Location();
+        private readonly ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
+        private readonly Location location = new Location();
 
         [Fact]
         public void OrderHistory_AddOrderToHistory_Successful()
@@ -46,11 +49,11 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             OrderHistory history = new OrderHistory();
-            List<IOrder> orders = new List<IOrder>( new Order[] {
+            List<IOrder> orders = new List<IOrder>(new Order[] {
                  new Order(customer, location)
             });
 
-            foreach(var order in orders)
+            foreach (var order in orders)
                 history.TryAddOrderToHistory(order);
 
             // act
@@ -59,6 +62,5 @@ namespace StoreApp.Library.Tests
             // assert
             Assert.Equal(orders.Count, foundOrders.Count);
         }
-
     }
 }

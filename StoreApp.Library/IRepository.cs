@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public class ProductDatabase
+    public interface IRepository
     {
-        public List<ProductData> Products { get; set; } = new List<ProductData>();
 
     }
 }

@@ -1,28 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using StoreApp.Library.Model;
 
 namespace StoreApp.Library
 {
     public class OrderHistory
     {
-        List<IOrder> orders { get; set; } = new List<IOrder>();
+        private List<IOrder> Orders { get; set; } = new List<IOrder>();
 
-        public List<IOrder> SearchStoreLocation(Location location)
-        {
-            return orders.FindAll(o => o.StoreLocation == location);
-        }
+        public List<IOrder> SearchStoreLocation(Location location) => Orders.FindAll(o => o.StoreLocation == location);
 
-        public List<IOrder> SearchByCustomer(ICustomer customer)
-        {
-            return orders.FindAll(o => o.Customer == customer);
-        }
+        public List<IOrder> SearchByCustomer(ICustomer customer) => Orders.FindAll(o => o.Customer == customer);
 
         public bool TryAddOrderToHistory(IOrder order)
         {
-            if (orders.Exists(o => o.ID == order.ID))
+            if (Orders.Exists(o => o.Id == order.Id))
                 return false;
 
-            orders.Add(order);
+            Orders.Add(order);
             return true;
         }
     }

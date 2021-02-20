@@ -11,8 +11,7 @@ namespace StoreApp.IO.Terminal
         public List<ChoiceOption> Options { get; private set; } = new List<ChoiceOption>();
 
         private ChoiceOption[] _currentOptions;
-
-        IIOController _io;
+        readonly IIOController _io;
 
         /// <summary>
         /// Creates a new ResponseChoice object

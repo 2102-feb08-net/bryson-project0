@@ -19,8 +19,10 @@ namespace StoreApp.Serialization
         public static async Task SerializeAsync<T>(T data, string fileName)
         {
             //using Stream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            options.WriteIndented = true;
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
             string json = JsonSerializer.Serialize(data, options);
             await File.WriteAllTextAsync(fileName, json);   
         }

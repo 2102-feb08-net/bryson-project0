@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StoreApp.Library
+namespace StoreApp.Library.Model
 {
     public interface IOrder
     {
@@ -11,14 +11,14 @@ namespace StoreApp.Library
         Location StoreLocation { get; }
 
         IReadOnlyDictionary<ISaleItem, int> ShoppingCartQuantity { get; }
-    
+
         DateTimeOffset? OrderTime { get; }
 
         decimal TotalPrice { get; }
 
         OrderState State { get; }
 
-        Guid ID { get; }
+        Guid Id { get; }
 
         void ProcessOrder();
     }

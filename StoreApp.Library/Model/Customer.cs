@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StoreApp.Library
+namespace StoreApp.Library.Model
 {
     public record Customer : ICustomer
     {
@@ -8,11 +8,9 @@ namespace StoreApp.Library
 
         public string LastName { get; init; }
 
+        public int Id { get; init; }
 
-        public override string ToString()
-        {
-            return $"{FirstName} {LastName}";
-        }
+        public override string ToString() => $"{FirstName} {LastName}";
 
         public Customer(string firstName, string lastName)
         {

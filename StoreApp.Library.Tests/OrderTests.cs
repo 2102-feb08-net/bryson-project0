@@ -1,16 +1,16 @@
 using System;
 using Xunit;
+using StoreApp.Library.Model;
 
 namespace StoreApp.Library.Tests
 {
     public class OrderTests
     {
-        ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
-        
-        IProduct product = new Product() { Name = "Apple", Category = "Food"};
+        private readonly ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
 
-        Location location = new Location();
+        private readonly IProduct product = new ProductData(name: "Apple", category: "Food");
 
+        private readonly Location location = new Location();
 
         [Fact]
         public void Order_Constructor_Success()
@@ -30,7 +30,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            Action constructor = () => new Order(null, location);
+            Order constructor() => new Order(null, location);
 
             // assert
             Assert.Throws<NullReferenceException>(constructor);
@@ -42,7 +42,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            Action constructor = () => new Order(customer, null);
+            Order constructor() => new Order(customer, null);
 
             // assert
             Assert.Throws<NullReferenceException>(constructor);
@@ -61,13 +61,11 @@ namespace StoreApp.Library.Tests
             // act
             order.SetProductToOrder(saleItem, quantity);
 
-            int quantityAdded;
-            bool foundOrder = order.ShoppingCartQuantity.TryGetValue(saleItem, out quantityAdded);
+            bool foundOrder = order.ShoppingCartQuantity.TryGetValue(saleItem, out int quantityAdded);
 
             // assert
             Assert.True(foundOrder && quantity == quantityAdded);
         }
-
 
         [Theory]
         [InlineData(-1)]
@@ -79,7 +77,7 @@ namespace StoreApp.Library.Tests
             ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            Action addToOrder = () => order.SetProductToOrder(saleItem, quantity);
+            void addToOrder() => order.SetProductToOrder(saleItem, quantity);
 
             // assert
             Assert.Throws<ArgumentException>(addToOrder);
@@ -95,7 +93,7 @@ namespace StoreApp.Library.Tests
             ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            Action addToOrder = () => order.SetProductToOrder(saleItem, quantity);
+            void addToOrder() => order.SetProductToOrder(saleItem, quantity);
 
             // assert
             Assert.Throws<ExcessiveOrderException>(addToOrder);

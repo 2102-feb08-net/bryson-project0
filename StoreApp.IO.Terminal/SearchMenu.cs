@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library;
+using StoreApp.Library.Model;
 
 namespace StoreApp.IO.Terminal
 {
     public class SearchMenu : Menu
     {
-        MainDatabase _database;
+        private readonly MainDatabase _database;
 
         public SearchMenu(IIOController io, Menu previousMenu, MainDatabase database) : base(io, previousMenu)
         {
@@ -35,13 +36,13 @@ namespace StoreApp.IO.Terminal
 
             List<Customer> customers = _database.CustomerDatabase.LookUpCustomer(firstName, lastName);
 
-            if(customers.Count == 0)
+            if (customers.Count == 0)
             {
                 _io.Output.Write($"No customers found with the name {firstName} {lastName}.");
                 return;
             }
 
-            if(customers.Count > 1)
+            if (customers.Count > 1)
             {
                 _io.Output.Write($"More than one customer was found with the name {firstName} {lastName}");
                 return;
@@ -55,12 +56,13 @@ namespace StoreApp.IO.Terminal
 
         private void SearchByLocation()
         {
-
+            _io.Output.Write("Enter the name of the store location:");
+            string name = _io.Input.ReadInput();
         }
 
         private void DisplayOrders(List<IOrder> orders, ICustomer customer)
         {
-            if(orders.Count == 0)
+            if (orders.Count == 0)
             {
                 _io.Output.Write($"The customer '{customer}' has no orders on record.");
                 return;

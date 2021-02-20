@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StoreApp.Library.Model;
 
 namespace StoreApp.IO.Terminal
 {
     public class MainMenu : Menu
     {
-        MainDatabase _mainDatabase;
+        private readonly MainDatabase _mainDatabase;
 
-        public MainMenu(IIOController io, MainDatabase mainDatabase) : base(io, null) 
+        public MainMenu(IIOController io, MainDatabase mainDatabase) : base(io, null)
         {
             _mainDatabase = mainDatabase;
         }
@@ -33,14 +34,14 @@ namespace StoreApp.IO.Terminal
             }
         }
 
-        void Search()
+        private void Search()
         {
             _io.Output.Write("Entering Search...");
             SearchMenu search = new SearchMenu(_io, this, _mainDatabase);
             search.Open();
         }
 
-        void AddCustomer()
+        private void AddCustomer()
         {
             _io.Output.Write("Enter their first name:");
             string firstName = _io.Input.ReadInput();
@@ -53,15 +54,12 @@ namespace StoreApp.IO.Terminal
             _io.Output.Write($"'{firstName} {lastName}' has been added to the database.");
         }
 
-        void PlaceOrder()
+        private void PlaceOrder()
         {
             OrderMenu order = new OrderMenu(_io, this, _mainDatabase);
             order.Open();
         }
 
-        void Quit()
-        {
-            Environment.Exit(0);
-        }
+        private void Quit() => Environment.Exit(0);
     }
 }

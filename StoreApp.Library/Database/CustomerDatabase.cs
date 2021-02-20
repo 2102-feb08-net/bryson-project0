@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using StoreApp.Library.Serializable;
+using StoreApp.Library.Model;
 
 namespace StoreApp.Library
 {
@@ -19,9 +20,6 @@ namespace StoreApp.Library
         /// <param name="firstname">The first name of the customer</param>
         /// <param name="lastName">The last name of the customer</param>
         /// <returns>Returns a list of all of the customers found</returns>
-        public List<Customer> LookUpCustomer(string firstname, string lastName)
-        {
-            return Customers.FindAll(c => c.FirstName == firstname && c.LastName == lastName);
-        }
+        public List<Customer> LookUpCustomer(string firstname, string lastName) => Customers.FindAll(c => c.FirstName == firstname && c.LastName == lastName);
     }
 }

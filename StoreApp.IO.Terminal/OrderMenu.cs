@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library;
-
+using StoreApp.Library.Model;
 
 namespace StoreApp.IO.Terminal
 {
@@ -12,14 +12,14 @@ namespace StoreApp.IO.Terminal
     {
         private IOrder _currentOrder;
 
-        MainDatabase _database;
+        private readonly MainDatabase _database;
 
-        public OrderMenu(IIOController io, Menu previousMenu, MainDatabase database) : base(io, previousMenu) 
+        public OrderMenu(IIOController io, Menu previousMenu, MainDatabase database) : base(io, previousMenu)
         {
             _database = database;
         }
 
-        bool buildingOrder = false;
+        private bool buildingOrder = false;
 
         public override void Open()
         {
@@ -29,7 +29,7 @@ namespace StoreApp.IO.Terminal
 
         private void CreateOrder()
         {
-            if(!TryAddCustomerToNewOrder(out Customer customer))
+            if (!TryAddCustomerToNewOrder(out Customer customer))
                 return;
 
             if (!TryAddLocationToOrder(out Location location))
@@ -62,7 +62,6 @@ namespace StoreApp.IO.Terminal
 
                 if (customer == null)
                     TryAgain(() => tryAgain = true);
-
             } while (tryAgain);
 
             return customer != null;
@@ -78,9 +77,8 @@ namespace StoreApp.IO.Terminal
 
                 location = LocationMenuHelper.LookUpLocation(_io, _database.LocationDatabase);
 
-                if(location == null)
+                if (location == null)
                     TryAgain(() => tryAgain = true);
-
             } while (tryAgain);
 
             return location != null;

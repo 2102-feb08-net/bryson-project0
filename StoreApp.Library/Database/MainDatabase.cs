@@ -15,5 +15,7 @@ namespace StoreApp.Library
         public LocationDatabase LocationDatabase { get; set; } = new LocationDatabase();
 
         public OrderHistory OrderHistory { get; set; } = new OrderHistory();
+
+        public string ConnectionString { get; set; }
     }
 }

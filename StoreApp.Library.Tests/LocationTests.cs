@@ -1,14 +1,15 @@
 ﻿using System;
 using Xunit;
+using StoreApp.Library.Model;
 
 namespace StoreApp.Library.Tests
 {
     public class LocationTests
     {
-        Location location = new Location();
+        private readonly Location location = new Location();
 
-        IProduct apple = new Product() { Name = "Apple", Category = "Food" };
-        IProduct banana = new Product() { Name = "Banana", Category = "Food" };
+        private readonly IProduct apple = new ProductData(name: "Apple", category: "Food");
+        private readonly IProduct banana = new ProductData(name: "Banana", category: "Food");
 
         [Fact]
         public void Location_IsProductAvailable_Success()
@@ -24,7 +25,7 @@ namespace StoreApp.Library.Tests
         }
 
         [Fact]
-        public void Location_IsProductAvailable_TooFew_Fail ()
+        public void Location_IsProductAvailable_TooFew_Fail()
         {
             // arrange
             location.Inventory.Add(apple, 3);
@@ -48,6 +49,5 @@ namespace StoreApp.Library.Tests
             // assert
             Assert.False(isAvailable);
         }
-
     }
 }
