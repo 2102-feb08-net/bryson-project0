@@ -17,13 +17,13 @@ namespace StoreApp.IO.Terminal
             _database = database;
         }
 
-        public override void Open()
+        public override async Task Open()
         {
             ResponseChoice response = new ResponseChoice(_io);
             response.Options.Add(new ChoiceOption("Search by Customer", SearchByCustomer));
             response.Options.Add(new ChoiceOption("Search by Location", SearchByLocation));
             response.Options.Add(new ChoiceOption("Go Back", ReturnToPreviousMenu));
-            response.ShowAndInvokeOptions();
+            await response.ShowAndInvokeOptions();
         }
 
         private void SearchByCustomer()

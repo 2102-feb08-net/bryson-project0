@@ -17,5 +17,7 @@ namespace StoreApp.Library
         public OrderHistory OrderHistory { get; set; } = new OrderHistory();
 
         public string ConnectionString { get; set; }
+
+        public Action<string> Logger { get; set; }
     }
 }

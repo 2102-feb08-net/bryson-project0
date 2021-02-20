@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library.Model;
+using StoreApp.DataAccess.Repository;
 
 namespace StoreApp.IO.Terminal
 {
@@ -18,7 +19,7 @@ namespace StoreApp.IO.Terminal
             _mainDatabase = mainDatabase;
         }
 
-        public override void Open()
+        public override async Task Open()
         {
             while (true)
             {
@@ -29,35 +30,41 @@ namespace StoreApp.IO.Terminal
                 response.Options.Add(new ChoiceOption("Search Database", Search));
                 response.Options.Add(new ChoiceOption("Add Customer", AddCustomer));
                 response.Options.Add(new ChoiceOption("Quit", Quit));
-                response.ShowAndInvokeOptions();
+                await response.ShowAndInvokeOptions();
                 _io.PressEnterToContinue();
             }
         }
 
-        private void Search()
+        private async Task Search()
         {
             _io.Output.Write("Entering Search...");
             SearchMenu search = new SearchMenu(_io, this, _mainDatabase);
-            search.Open();
+            await search.Open();
         }
 
-        private void AddCustomer()
+        private async Task AddCustomer()
         {
             _io.Output.Write("Enter their first name:");
             string firstName = _io.Input.ReadInput();
             _io.Output.Write("Enter their last name:");
             string lastName = _io.Input.ReadInput();
 
-            _mainDatabase.CustomerDatabase.Customers.Add(new Customer(firstName, lastName));
+            CustomerRepository repo = new CustomerRepository(_mainDatabase.ConnectionString, _mainDatabase.Logger);
+            //_mainDatabase.CustomerDatabase.Customers.Add(new Customer(firstName, lastName));
             _io.Output.Write("Adding customer...");
-            Serializer.SerializeAsync(_mainDatabase.CustomerDatabase, DatabasePaths.CUSTOMER_DATABASE_PATH).GetAwaiter().GetResult();
-            _io.Output.Write($"'{firstName} {lastName}' has been added to the database.");
+            bool success = await repo.TryCreateCustomerAsync(firstName, lastName);
+            //Serializer.SerializeAsync(_mainDatabase.CustomerDatabase, DatabasePaths.CUSTOMER_DATABASE_PATH).GetAwaiter().GetResult();
+
+            if (success)
+                _io.Output.Write($"'{firstName} {lastName}' has been added to the database.");
+            else
+                _io.Output.Write($"ERROR: Failed to write customer '{firstName} {lastName}' to the database");
         }
 
-        private void PlaceOrder()
+        private async Task PlaceOrder()
         {
             OrderMenu order = new OrderMenu(_io, this, _mainDatabase);
-            order.Open();
+            await order.Open();
         }
 
         private void Quit() => Environment.Exit(0);

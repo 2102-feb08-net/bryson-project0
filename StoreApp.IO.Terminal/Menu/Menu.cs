@@ -17,7 +17,7 @@ namespace StoreApp.IO.Terminal
             _io = io;
         }
 
-        public abstract void Open();
+        public abstract Task Open();
 
         protected void ReturnToPreviousMenu()
         {
@@ -25,6 +25,6 @@ namespace StoreApp.IO.Terminal
                 _previousMenu.Open();
             else
                 Environment.Exit(0);
-        }    
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StoreApp.DataAccess.Repository;
 using StoreApp.Library;
 using StoreApp.Library.Model;
 
@@ -10,7 +11,7 @@ namespace StoreApp.IO.Terminal
 {
     public static class CustomerMenuHelper
     {
-        public static Customer LookUpCustomer(IIOController io, CustomerDatabase database)
+        public static async Task<Customer> LookUpCustomer(IIOController io, MainDatabase database)
         {
             io.Output.Write("Enter their first name:");
             string firstName = io.Input.ReadInput();
@@ -18,7 +19,9 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Enter their last name:");
             string lastName = io.Input.ReadInput();
 
-            List<Customer> customers = database.LookUpCustomer(firstName, lastName);
+            CustomerRepository repo = new CustomerRepository(database.ConnectionString, database.Logger);
+
+            List<Customer> customers = await repo.LookUpCustomersByNameAsync(firstName, lastName);
 
             if (customers.Count == 0)
             {

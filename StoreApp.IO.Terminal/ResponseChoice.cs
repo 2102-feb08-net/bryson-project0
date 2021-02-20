@@ -11,7 +11,7 @@ namespace StoreApp.IO.Terminal
         public List<ChoiceOption> Options { get; private set; } = new List<ChoiceOption>();
 
         private ChoiceOption[] _currentOptions;
-        readonly IIOController _io;
+        private readonly IIOController _io;
 
         /// <summary>
         /// Creates a new ResponseChoice object
@@ -27,25 +27,25 @@ namespace StoreApp.IO.Terminal
         /// Displays all of the options set in the Options list then prompts the user to select one of them.
         /// </summary>
         /// <param name="options">The options that the user can choose</param>
-        public void ShowAndInvokeOptions(params ChoiceOption[] options)
+        public async Task ShowAndInvokeOptions(params ChoiceOption[] options)
         {
             _currentOptions = new ChoiceOption[Options.Count];
             Options.CopyTo(_currentOptions);
 
             DisplayOptions();
-            InvokeChoice();
+            await InvokeChoice();
         }
 
         private void DisplayOptions()
         {
             _io.Output.Write("Please select one of the following actions:");
-            for(int i = 0; i < _currentOptions.Length; i++)
+            for (int i = 0; i < _currentOptions.Length; i++)
             {
                 _io.Output.Write($"{i + 1}. {_currentOptions[i].TextDescription}");
             }
         }
 
-        private void InvokeChoice()
+        private async Task InvokeChoice()
         {
             int? responseIndex = null;
 
@@ -65,11 +65,9 @@ namespace StoreApp.IO.Terminal
                     _io.Output.Write("Input must be a valid option number.");
                     DisplayOptions();
                 }
-
             } while (!responseIndex.HasValue);
 
-            var action = _currentOptions[responseIndex.Value].ChoiceAction;
-            action?.Invoke();
+            await _currentOptions[responseIndex.Value].RunAsync();
         }
     }
 }

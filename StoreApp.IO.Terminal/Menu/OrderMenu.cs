@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library;
 using StoreApp.Library.Model;
+using StoreApp.DataAccess.Repository;
 
 namespace StoreApp.IO.Terminal
 {
@@ -21,15 +22,16 @@ namespace StoreApp.IO.Terminal
 
         private bool buildingOrder = false;
 
-        public override void Open()
+        public override async Task Open()
         {
             buildingOrder = true;
-            CreateOrder();
+            await CreateOrder();
         }
 
-        private void CreateOrder()
+        private async Task CreateOrder()
         {
-            if (!TryAddCustomerToNewOrder(out Customer customer))
+            Customer customer = await AttemptAddCustomerToNewOrder();
+            if (customer == null)
                 return;
 
             if (!TryAddLocationToOrder(out Location location))
@@ -44,12 +46,13 @@ namespace StoreApp.IO.Terminal
                 response.Options.Add(new ChoiceOption("Check Order Status", CheckStatus));
                 response.Options.Add(new ChoiceOption("Cancel Order", CancelOrder));
                 response.Options.Add(new ChoiceOption("Submit Order", TrySubmitOrder));
-                response.ShowAndInvokeOptions();
+                await response.ShowAndInvokeOptions();
             }
         }
 
-        private bool TryAddCustomerToNewOrder(out Customer customer)
+        private async Task<Customer> AttemptAddCustomerToNewOrder()
         {
+            Customer customer = null;
             bool tryAgain;
 
             do
@@ -58,13 +61,13 @@ namespace StoreApp.IO.Terminal
 
                 _io.Output.Write("Please select a customer to order as.");
 
-                customer = CustomerMenuHelper.LookUpCustomer(_io, _database.CustomerDatabase);
+                customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
                 if (customer == null)
                     TryAgain(() => tryAgain = true);
             } while (tryAgain);
 
-            return customer != null;
+            return customer;
         }
 
         private bool TryAddLocationToOrder(out Location location)
@@ -88,7 +91,7 @@ namespace StoreApp.IO.Terminal
         {
             ResponseChoice response = new ResponseChoice(_io);
             response.Options.Add(new ChoiceOption("Try again with different values", tryAgain));
-            response.Options.Add(new ChoiceOption("Cancel order", null));
+            response.Options.Add(new ChoiceOption("Cancel order"));
             response.ShowAndInvokeOptions();
         }
 
@@ -111,9 +114,13 @@ namespace StoreApp.IO.Terminal
             _io.Output.Write(display);
         }
 
-        public void TrySubmitOrder()
+        public async Task TrySubmitOrder()
         {
             _currentOrder.ProcessOrder();
+
+            ProductRepository repo = new ProductRepository(_database.ConnectionString, _database.Logger);
+            await repo.TryOrderTransaction(_currentOrder);
+
             buildingOrder = false;
         }
     }

@@ -19,7 +19,7 @@ namespace StoreApp.IO.Terminal
             await LoadDatabases();
 
             MainMenu mainMenu = new MainMenu(io, _mainDatabase);
-            mainMenu.Open();
+            await mainMenu.Open();
         }
 
         private static async Task LoadDatabases()
@@ -27,6 +27,7 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Loading databases...");
             _mainDatabase.CustomerDatabase = await Serializer.DeserializeAsync<CustomerDatabase>(DatabasePaths.CUSTOMER_DATABASE_PATH);
             _mainDatabase.ConnectionString = await File.ReadAllTextAsync(CONNECTION_STRING_PATH);
+            _mainDatabase.Logger = (s) => System.Diagnostics.Debug.WriteLine(s);
             io.Output.Write("Finished loading databases...");
             io.Output.Write();
         }

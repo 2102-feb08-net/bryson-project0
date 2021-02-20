@@ -6,13 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-using StoreApp.Library.Model;
-
 namespace StoreApp.Library.Tests
 {
     public class OrderHistoryTests
     {
-        private readonly ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
+        private readonly ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe", Id = 1 };
         private readonly Location location = new Location();
 
         [Fact]

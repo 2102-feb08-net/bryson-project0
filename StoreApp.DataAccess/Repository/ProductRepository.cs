@@ -15,7 +15,7 @@ namespace StoreApp.DataAccess.Repository
         {
         }
 
-        public async Task TryOrderTransaction(Library.Model.Order order)
+        public async Task TryOrderTransaction(Library.Model.IOrder order)
         {
             using var context = new DigitalStoreContext();
 
