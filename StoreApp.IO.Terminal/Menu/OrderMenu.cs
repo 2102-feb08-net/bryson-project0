@@ -61,7 +61,7 @@ namespace StoreApp.IO.Terminal
             {
                 tryAgain = false;
 
-                _io.Output.Write("Please select a customer to order as.");
+                _io.Output.Write("Please select a customer to order as:");
 
                 customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
@@ -93,15 +93,23 @@ namespace StoreApp.IO.Terminal
         private async Task TryAgain(Action tryAgain)
         {
             ResponseChoice response = new ResponseChoice(_io);
-            response.Options.Add(new ChoiceOption("Try again with different values", tryAgain));
+            response.Options.Add(new ChoiceOption("Try again with a different value", tryAgain));
             response.Options.Add(new ChoiceOption("Cancel order"));
             await response.ShowAndInvokeOptions();
         }
 
-        private void AddNewProductToOrder()
+        private async Task AddNewProductToOrder()
         {
-            _io.Output.Write("Enter the name of the product you wish to add to the order:");
-            string productName = _io.Input.ReadInput();
+            IProduct product = await ProductMenuHelper.LookUpProductAsync(_io, _database);
+            if (product == null)
+                return;
+
+            if (!ProductMenuHelper.TryEnterProductQuantity(_io, out int quantity))
+                return;
+
+            AttemptResult successAttempt = _currentOrder.TryAddProductToOrder(product, quantity);
+            if (!successAttempt)
+                _io.Output.Write(successAttempt.FailureMessage);
         }
 
         private void CancelOrder()
@@ -119,12 +127,13 @@ namespace StoreApp.IO.Terminal
 
         public async Task TrySubmitOrder()
         {
-            _currentOrder.ProcessOrder();
+            buildingOrder = false;
 
             ProductRepository repo = new ProductRepository(_database.ConnectionString, _database.Logger);
-            await repo.TryOrderTransaction(_currentOrder);
+            bool success = await repo.TryOrderTransaction(_currentOrder);
 
-            buildingOrder = false;
+            if (success)
+                _io.Output.Write("Order submitted successfully!");
         }
     }
 }

@@ -10,34 +10,39 @@ namespace StoreApp.IO.Terminal
 {
     public class OrderDisplayer
     {
-        public string GetOrderDisplay(IOrder order)
+        public string GetOrderDisplay(IReadOnlyOrder order)
         {
             StringBuilder sb = new StringBuilder();
 
-            string stateDisplay = order.State == OrderState.Processed ? order.OrderTime.ToString() : "In Progress";
+            string stateDisplay = order.Id != null && order.OrderTime != null ? $"{order.OrderTime} | Order# {order.Id}" : "Order In Progress";
             string customer = order?.Customer?.DisplayName() ?? "Missing Customer";
-            string location = order?.StoreLocation?.Address ?? "No Location Set";
+            string location = order?.StoreLocation?.Name ?? "No Location Set";
 
-            sb.AppendLine($"=========================================================================================");
-            sb.AppendLine($" {stateDisplay} | {customer} | {location}");
-            sb.AppendLine($"=========================================================================================");
-            sb.AppendLine($"\t         Product Name         |      Category     | Quantity |   Unit Price");
-            sb.AppendLine($"\t--------------------------------------------------------------------------------------");
+            string overviewData = $"{stateDisplay} | {customer} | {location}";
+
+            sb.AppendLine($"================================================================================================");
+            sb.AppendLine($"= {overviewData,-92} =");
+            sb.AppendLine($"================================================================================================");
+            sb.AppendLine($"\t|        Product Name         |      Category     | Quantity |   Unit Price            |");
+            sb.AppendLine($"\t|--------------------------------------------------------------------------------------|");
 
             foreach (var pair in order.ShoppingCartQuantity)
             {
-                ISaleItem saleItem = pair.Key;
+                IProduct product = pair.Key;
                 int quantity = pair.Value;
-                sb.AppendLine($"\t{saleItem.Product.Name,-30} | {saleItem.Product.Category,-17} | {quantity,-8} | {saleItem.UnitPrice}");
+                sb.AppendLine($"\t|{product.Name,-28} | {product.Category,-17} | {quantity,-8} | ${product.UnitPrice.ToString("0.##"),-23}|");
             }
 
             if (order.ShoppingCartQuantity.Count == 0)
-                sb.AppendLine("There are currently no items in this order.");
+                sb.AppendLine("\t| There are currently no items in this order.                                          |");
+            sb.AppendLine($"\t|--------------------------------------------------------------------------------------|");
+            sb.AppendLine($"\t|Total: ${OrderProcessor.CalculateTotalPrice(order).ToString("0.##"),-78}|");
+            sb.AppendLine($"\t----------------------------------------------------------------------------------------");
 
             return sb.ToString();
         }
 
-        public IEnumerable<string> GetBatchOrderDisplay(List<IOrder> orders)
+        public IEnumerable<string> GetBatchOrderDisplay(List<IReadOnlyOrder> orders)
         {
             foreach (var order in orders)
             {

@@ -11,5 +11,7 @@ namespace StoreApp.Library.Model
         string Name { get; }
 
         string Category { get; }
+
+        decimal UnitPrice { get; }
     }
 }

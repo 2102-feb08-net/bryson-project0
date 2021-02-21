@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StoreApp.DataAccess.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,9 @@ namespace StoreApp.DataAccess.Repository
         {
             using var context = new DigitalStoreContext(Options);
 
-            string trimmedFirst = firstName.Trim();
-            string trimmedLast = string.IsNullOrWhiteSpace(lastName) ? null : lastName.Trim();
+            var query = CustomerQuery.GetCustomersFromName(context, firstName, lastName);
 
-            var customers = await context.Customers.Where(c => c.FirstName == trimmedFirst && c.LastName == trimmedLast).ToListAsync();
+            var customers = await query.ToListAsync();
             return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
 
@@ -46,6 +46,12 @@ namespace StoreApp.DataAccess.Repository
             return customers.Select(c => (Library.Model.ICustomer)new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
 
+        /// <summary>
+        /// Creates a customer and adds it into the database. It does not check for duplicates before creating it.
+        /// </summary>
+        /// <param name="firstName">The first name of the customer.</param>
+        /// <param name="lastName">The last name of the customer.</param>
+        /// <returns>Returns whether it was successful in adding the customer to the database</returns>
         public async Task<bool> TryCreateCustomerAsync(string firstName, string lastName)
         {
             using var context = new DigitalStoreContext(Options);

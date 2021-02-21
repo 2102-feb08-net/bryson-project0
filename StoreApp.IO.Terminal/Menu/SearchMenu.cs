@@ -8,6 +8,8 @@ using StoreApp.Library.Model;
 
 using System.Linq;
 
+using StoreApp.DataAccess.Repository;
+
 namespace StoreApp.IO.Terminal
 {
     public class SearchMenu : Menu
@@ -49,24 +51,36 @@ namespace StoreApp.IO.Terminal
         {
             ICustomer customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
-            var orders = _database.OrderHistory.SearchByCustomer(customer);
-            DisplayOrders(orders, customer);
-        }
+            OrderRepository repo = new OrderRepository(_database.ConnectionString, _database.Logger);
+            var orders = await repo.GetOrdersFromCustomer(customer);
 
-        private void SearchOrdersByLocation()
-        {
-            _io.Output.Write("Enter the name of the store location:");
-            string name = _io.Input.ReadInput();
-        }
-
-        private void DisplayOrders(List<IOrder> orders, ICustomer customer)
-        {
             if (orders.Count == 0)
             {
                 _io.Output.Write($"The customer '{customer.DisplayName()}' has no orders on record.");
                 return;
             }
 
+            DisplayOrders(orders);
+        }
+
+        private async Task SearchOrdersByLocation()
+        {
+            _io.Output.Write("Enter the name of the store location:");
+            string name = _io.Input.ReadInput();
+
+            OrderRepository repo = new OrderRepository(_database.ConnectionString, _database.Logger);
+            var orders = await repo.GetOrdersFromLocation(name);
+
+            if (orders.Count == 0)
+            {
+                _io.Output.Write($"No orders were found on record for '{name}'. Either no records have ever occured or the location does not exist.");
+                return;
+            }
+            DisplayOrders(orders);
+        }
+
+        private void DisplayOrders(List<IReadOnlyOrder> orders)
+        {
             OrderDisplayer displayer = new OrderDisplayer();
             foreach (string display in displayer.GetBatchOrderDisplay(orders))
                 _io.Output.Write(display);

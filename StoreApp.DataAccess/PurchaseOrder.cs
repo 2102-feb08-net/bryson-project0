@@ -15,7 +15,7 @@ namespace StoreApp.DataAccess
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int StoreLocationId { get; set; }
-        public DateTime DateProcessed { get; set; }
+        public DateTimeOffset DateProcessed { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual StoreLocation StoreLocation { get; set; }

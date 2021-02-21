@@ -8,7 +8,7 @@ namespace StoreApp.Library.Tests
     {
         private readonly ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
 
-        private readonly IProduct product = new ProductData(name: "Apple", category: "Food");
+        private readonly IProduct product = new ProductData(name: "Apple", category: "Food", unitPrice: 1.29m);
 
         private readonly Location location = new Location();
 
@@ -56,12 +56,11 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             Order order = new Order(customer, location);
-            ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            order.SetProductToOrder(saleItem, quantity);
+            order.SetProductToOrder(product, quantity);
 
-            bool foundOrder = order.ShoppingCartQuantity.TryGetValue(saleItem, out int quantityAdded);
+            bool foundOrder = order.ShoppingCartQuantity.TryGetValue(product, out int quantityAdded);
 
             // assert
             Assert.True(foundOrder && quantity == quantityAdded);
@@ -74,10 +73,9 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             Order order = new Order(customer, location);
-            ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            void addToOrder() => order.SetProductToOrder(saleItem, quantity);
+            void addToOrder() => order.SetProductToOrder(product, quantity);
 
             // assert
             Assert.Throws<ArgumentException>(addToOrder);
@@ -90,13 +88,12 @@ namespace StoreApp.Library.Tests
         {
             // arrange
             Order order = new Order(customer, location);
-            ISaleItem saleItem = new SaleItem() { Product = product, UnitPrice = 5 };
 
             // act
-            void addToOrder() => order.SetProductToOrder(saleItem, quantity);
+            void addToOrder() => order.SetProductToOrder(product, quantity);
 
             // assert
-            Assert.Throws<ExcessiveOrderException>(addToOrder);
+            Assert.Throws<ArgumentException>(addToOrder);
         }
     }
 }

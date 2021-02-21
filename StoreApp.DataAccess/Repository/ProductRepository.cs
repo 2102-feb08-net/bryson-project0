@@ -15,55 +15,60 @@ namespace StoreApp.DataAccess.Repository
         {
         }
 
-        public async Task TryOrderTransaction(Library.Model.IOrder order)
+        public async Task<bool> TryOrderTransaction(IOrder order)
         {
-            using var context = new DigitalStoreContext();
+            using var context = new DigitalStoreContext(Options);
 
-            List<OrderLine> orderLines = new List<OrderLine>();
-            var productNames = order.ShoppingCartQuantity.Keys.Select(s => s.Product.Name).ToList();
+            var productNames = order.ShoppingCartQuantity.Keys.Select(s => s.Name).ToList();
             var foundProducts = await context.Products.Where(p => productNames.Contains(p.Name)).ToListAsync();
+
+            PurchaseOrder purchaseOrder = new PurchaseOrder()
+            {
+                // TODO: Replace with proper authentication and unique identification using a Login System
+                CustomerId = order.Customer.Id,
+                DateProcessed = DateTime.Now,
+                OrderLines = new List<OrderLine>(),
+                StoreLocationId = order.StoreLocation.Id
+            };
+
             foreach (var productQuantity in order.ShoppingCartQuantity)
             {
                 var product = productQuantity.Key;
                 int quantity = productQuantity.Value;
-                orderLines.Add(new OrderLine()
+                purchaseOrder.OrderLines.Add(new OrderLine()
                 {
                     Quantity = quantity,
-                    Product = foundProducts.Find(p => p.Name == product.Product.Name)
+                    Product = foundProducts.Find(p => p.Name == product.Name),
+                    PurchaseOrder = purchaseOrder
                 });
             }
-
-            PurchaseOrder purchaseOrder = new PurchaseOrder()
-            {
-                Id = await GenerateNextIdAsync(context.PurchaseOrders),
-                OrderLines = orderLines,
-
-                // TODO: Replace with proper authentication and unique identification using a Login System
-                CustomerId = order.Customer.Id,
-                DateProcessed = DateTime.Now
-            };
 
             await context.PurchaseOrders.AddAsync(purchaseOrder);
 
             await context.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task<ProductData> LookupProductFromName(string name)
+        public async Task<IProduct> LookupProductFromName(string name)
         {
             using var context = new DigitalStoreContext(Options);
 
             var product = await context.Products.Where(c => c.Name == name).FirstOrDefaultAsync();
 
-            return new ProductData(product.Name, product.Category);
+            if (product != null)
+                return new ProductData(product.Name, product.Category, product.UnitPrice);
+            else
+                return null;
         }
 
-        public async Task<List<ProductData>> SearchForProducts(string searchQuery)
+        public async Task<List<IProduct>> SearchForProducts(string searchQuery)
         {
             using var context = new DigitalStoreContext(Options);
 
             var products = context.Products.Where(c => c.Name.Contains(searchQuery));
 
-            return await products.Select(p => new ProductData(p.Name, p.Category)).ToListAsync();
+            return await products.Select(p => (IProduct)new ProductData(p.Name, p.Category, p.UnitPrice)).ToListAsync();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace StoreApp.DataAccess.Repository
                 .FirstAsync(s => s.Name == name);
             var inventoryPairs = storeLocation.Inventories.Select(
                 i => new KeyValuePair<Library.Model.IProduct, int>(
-                    new Library.Model.ProductData(i.Product.Name, i.Product.Category),
+                    new Library.Model.ProductData(i.Product.Name, i.Product.Category, i.Product.UnitPrice),
                     i.Quantity)).ToList();
 
             var inventoryDictionary = inventoryPairs.ToDictionary((keyItem) => (keyItem).Key, (valueItem) => valueItem.Value);
@@ -32,23 +32,12 @@ namespace StoreApp.DataAccess.Repository
             Library.Model.Location location = new()
             {
                 Name = storeLocation.Name,
-                Address = PrintAddress(storeLocation.Address),
-                Inventory = inventoryDictionary
+                Address = storeLocation.Address.Print(),
+                Inventory = inventoryDictionary,
+                Id = storeLocation.Id
             };
 
             return location;
-        }
-
-        private string PrintAddress(Address address)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(address.Address1);
-
-            if (address.Address2 != null)
-                sb.AppendLine(address.Address2);
-            sb.AppendLine($"{address.City}, {address.State} {address.ZipCode}");
-            sb.AppendLine(address.Country);
-            return sb.ToString();
         }
     }
 }

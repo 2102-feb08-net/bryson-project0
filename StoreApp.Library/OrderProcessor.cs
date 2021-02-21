@@ -7,13 +7,18 @@ using StoreApp.Library.Model;
 
 namespace StoreApp.Library
 {
-    public class OrderProcessor
+    public static class OrderProcessor
     {
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="order"></param>
-        /// <returns>Whether it was succesful in processing the order.</returns>
-        public bool TryProcessOrder(IOrder order) => false;
+        public static decimal CalculateTotalPrice(this IReadOnlyOrder order)
+        {
+            decimal total = 0;
+            foreach (var pair in order.ShoppingCartQuantity)
+            {
+                IProduct saleItem = pair.Key;
+                int quantity = pair.Value;
+                total += saleItem.UnitPrice * quantity;
+            }
+            return total;
+        }
     }
 }

@@ -20,7 +20,6 @@ namespace StoreApp.IO.Terminal
             string lastName = io.Input.ReadInput();
 
             CustomerRepository repo = new CustomerRepository(database.ConnectionString, database.Logger);
-
             List<Customer> customers = await repo.LookUpCustomersByNameAsync(firstName, lastName);
 
             if (customers.Count == 0)
