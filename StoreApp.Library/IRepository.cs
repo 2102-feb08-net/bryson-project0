@@ -8,6 +8,5 @@ namespace StoreApp.Library
 {
     public interface IRepository
     {
-
     }
 }
