@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using StoreApp.Library.Model;
+using StoreApp.Library;
 
 namespace StoreApp.DataAccess.Repository
 {
@@ -15,12 +16,18 @@ namespace StoreApp.DataAccess.Repository
         {
         }
 
-        public async Task<bool> TryOrderTransaction(IOrder order)
+        public async Task<AttemptResult> TryOrderTransaction(IOrder order)
         {
             using var context = new DigitalStoreContext(Options);
 
+            if (order.ShoppingCartQuantity.Count == 0)
+                return AttemptResult.Fail("Cannot submit order with no products in cart.");
+
             var productNames = order.ShoppingCartQuantity.Keys.Select(s => s.Name).ToList();
             var foundProducts = await context.Products.Where(p => productNames.Contains(p.Name)).ToListAsync();
+
+            if (productNames.Count != foundProducts.Count)
+                return AttemptResult.Fail("Product in cart did not exist in the database.");
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
             {
@@ -47,7 +54,7 @@ namespace StoreApp.DataAccess.Repository
 
             await context.SaveChangesAsync();
 
-            return true;
+            return AttemptResult.Success();
         }
 
         public async Task<IProduct> LookupProductFromName(string name)

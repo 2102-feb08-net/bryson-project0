@@ -130,10 +130,12 @@ namespace StoreApp.IO.Terminal
             buildingOrder = false;
 
             ProductRepository repo = new ProductRepository(_database.ConnectionString, _database.Logger);
-            bool success = await repo.TryOrderTransaction(_currentOrder);
+            AttemptResult successAttempt = await repo.TryOrderTransaction(_currentOrder);
 
-            if (success)
+            if (successAttempt)
                 _io.Output.Write("Order submitted successfully!");
+            else
+                _io.Output.Write($"Order Failed: {successAttempt.FailureMessage}");
         }
     }
 }
