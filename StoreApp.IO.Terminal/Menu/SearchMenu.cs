@@ -22,13 +22,30 @@ namespace StoreApp.IO.Terminal
         public override async Task Open()
         {
             ResponseChoice response = new ResponseChoice(_io);
-            response.Options.Add(new ChoiceOption("Search by Customer", SearchByCustomer));
-            response.Options.Add(new ChoiceOption("Search by Location", SearchByLocation));
+            response.Options.Add(new ChoiceOption("Search List of Customers", SearchListOfCustomers));
+            response.Options.Add(new ChoiceOption("Search Orders by Customer", SearchOrdersByCustomer));
+            response.Options.Add(new ChoiceOption("Search Orders by Store Location", SearchOrdersByLocation));
             response.Options.Add(new ChoiceOption("Go Back", ReturnToPreviousMenu));
             await response.ShowAndInvokeOptions();
         }
 
-        private async Task SearchByCustomer()
+        private async Task SearchListOfCustomers()
+        {
+            List<ICustomer> foundCustomers = await CustomerMenuHelper.SearchCustomer(_io, _database);
+
+            if (foundCustomers.Count > 0)
+            {
+                _io.Output.Write("Customers found:");
+
+                foundCustomers.ForEach(c => _io.Output.Write(c.DisplayName()));
+            }
+            else
+            {
+                _io.Output.Write("No customers found.");
+            }
+        }
+
+        private async Task SearchOrdersByCustomer()
         {
             ICustomer customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
@@ -36,7 +53,7 @@ namespace StoreApp.IO.Terminal
             DisplayOrders(orders, customer);
         }
 
-        private void SearchByLocation()
+        private void SearchOrdersByLocation()
         {
             _io.Output.Write("Enter the name of the store location:");
             string name = _io.Input.ReadInput();

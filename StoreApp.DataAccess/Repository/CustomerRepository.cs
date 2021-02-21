@@ -23,18 +23,39 @@ namespace StoreApp.DataAccess.Repository
         {
             using var context = new DigitalStoreContext(Options);
 
-            var customers = await context.Customers.Where(c => c.FirstName == firstName && c.LastName == lastName).ToListAsync();
+            string trimmedFirst = firstName.Trim();
+            string trimmedLast = string.IsNullOrWhiteSpace(lastName) ? null : lastName.Trim();
+
+            var customers = await context.Customers.Where(c => c.FirstName == trimmedFirst && c.LastName == trimmedLast).ToListAsync();
             return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
+        }
+
+        /// <summary>
+        /// Searches the database for customers that have either their first or last name contain the search query
+        /// </summary>
+        /// <param name="nameQuery">The query to search for in the customers' full names</param>
+        /// <returns>Returns a list of customers as some customers contain the query</returns>
+        public async Task<List<Library.Model.ICustomer>> SearchCustomersAsync(string nameQuery)
+        {
+            using var context = new DigitalStoreContext(Options);
+
+            if (string.IsNullOrWhiteSpace(nameQuery))
+                throw new ArgumentException("Search query cannot be empty or null");
+
+            var customers = await context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (c.LastName != null && c.LastName.Contains(nameQuery))).ToListAsync();
+            return customers.Select(c => (Library.Model.ICustomer)new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
 
         public async Task<bool> TryCreateCustomerAsync(string firstName, string lastName)
         {
             using var context = new DigitalStoreContext(Options);
 
+            bool lastNameIsEmpty = string.IsNullOrWhiteSpace(lastName);
+
             await context.Customers.AddAsync(new Customer()
             {
-                FirstName = firstName,
-                LastName = lastName
+                FirstName = firstName.Trim(),
+                LastName = lastNameIsEmpty ? null : lastName.Trim()
             }
             );
 

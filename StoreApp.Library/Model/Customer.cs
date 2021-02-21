@@ -18,7 +18,7 @@ namespace StoreApp.Library.Model
                 throw new ArgumentException("A customer must have a first name that is not null or empty.");
 
             FirstName = firstName ?? throw new NullReferenceException();
-            LastName = lastName ?? throw new NullReferenceException();
+            LastName = lastName;
 
             Id = id;
         }

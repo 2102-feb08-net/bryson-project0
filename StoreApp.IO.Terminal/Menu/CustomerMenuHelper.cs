@@ -36,5 +36,23 @@ namespace StoreApp.IO.Terminal
 
             return customers[0];
         }
+
+        public static async Task<List<ICustomer>> SearchCustomer(IIOController io, MainDatabase database)
+        {
+            io.Output.Write("Enter a search query for a name:");
+            string searchQuery = io.Input.ReadInput();
+
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                io.Output.Write("Search cannot be empty.");
+                return null;
+            }
+
+            CustomerRepository repo = new CustomerRepository(database.ConnectionString, database.Logger);
+
+            List<ICustomer> customers = await repo.SearchCustomersAsync(searchQuery);
+
+            return customers;
+        }
     }
 }
