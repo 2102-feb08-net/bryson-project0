@@ -8,10 +8,10 @@ namespace StoreApp.Library.Model
 {
     public class Location
     {
-        public string Name { get; }
-        public string Address { get; }
+        public string Name { get; init; }
+        public string Address { get; init; }
 
-        public Dictionary<IProduct, int> Inventory = new Dictionary<IProduct, int>();
+        public Dictionary<IProduct, int> Inventory { get; init; } = new Dictionary<IProduct, int>();
 
         /// <summary>
         /// Checks whether there is available stock of said product and quantity.

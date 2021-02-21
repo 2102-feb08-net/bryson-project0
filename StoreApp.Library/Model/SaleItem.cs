@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreApp.Library
+namespace StoreApp.Library.Model
 {
     public record SaleItem : ISaleItem
     {

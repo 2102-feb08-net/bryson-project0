@@ -34,7 +34,9 @@ namespace StoreApp.IO.Terminal
             if (customer == null)
                 return;
 
-            if (!TryAddLocationToOrder(out Location location))
+            Location location = await AttemptAddLocationToOrder();
+
+            if (location == null)
                 return;
 
             _currentOrder = new Order(customer, location);
@@ -64,35 +66,36 @@ namespace StoreApp.IO.Terminal
                 customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
                 if (customer == null)
-                    TryAgain(() => tryAgain = true);
+                    await TryAgain(() => tryAgain = true);
             } while (tryAgain);
 
             return customer;
         }
 
-        private bool TryAddLocationToOrder(out Location location)
+        private async Task<Location> AttemptAddLocationToOrder()
         {
+            Location location = null;
             bool tryAgain;
 
             do
             {
                 tryAgain = false;
 
-                location = LocationMenuHelper.LookUpLocation(_io, _database.LocationDatabase);
+                location = await LocationMenuHelper.LookUpLocation(_io, _database);
 
                 if (location == null)
-                    TryAgain(() => tryAgain = true);
+                    await TryAgain(() => tryAgain = true);
             } while (tryAgain);
 
-            return location != null;
+            return location;
         }
 
-        private void TryAgain(Action tryAgain)
+        private async Task TryAgain(Action tryAgain)
         {
             ResponseChoice response = new ResponseChoice(_io);
             response.Options.Add(new ChoiceOption("Try again with different values", tryAgain));
             response.Options.Add(new ChoiceOption("Cancel order"));
-            response.ShowAndInvokeOptions();
+            await response.ShowAndInvokeOptions();
         }
 
         private void AddNewProductToOrder()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StoreApp.Library
+namespace StoreApp.Library.Model
 {
     public class ProductData : IProduct
     {

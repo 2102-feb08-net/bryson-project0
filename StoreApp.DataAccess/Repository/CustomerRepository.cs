@@ -13,6 +13,12 @@ namespace StoreApp.DataAccess.Repository
         {
         }
 
+        /// <summary>
+        /// Creates and sends a request to the server to get the customer entry with the specified first and last name
+        /// </summary>
+        /// <param name="firstName">The first name of the customer</param>
+        /// <param name="lastName">The last name of the customer</param>
+        /// <returns>Returns a list of customers as some customers may have the same name</returns>
         public async Task<List<Library.Model.Customer>> LookUpCustomersByNameAsync(string firstName, string lastName)
         {
             using var context = new DigitalStoreContext(Options);
@@ -25,13 +31,10 @@ namespace StoreApp.DataAccess.Repository
         {
             using var context = new DigitalStoreContext(Options);
 
-            int id = await GenerateNextIdAsync(context.Customers);
-
             await context.Customers.AddAsync(new Customer()
             {
                 FirstName = firstName,
-                LastName = lastName,
-                Id = id
+                LastName = lastName
             }
             );
 

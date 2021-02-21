@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
-using StoreApp.Library;
+using StoreApp.Library.Model;
 
 namespace StoreApp.DataAccess.Repository
 {

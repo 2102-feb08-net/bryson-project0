@@ -26,32 +26,12 @@ namespace StoreApp.IO.Terminal
             await response.ShowAndInvokeOptions();
         }
 
-        private void SearchByCustomer()
+        private async Task SearchByCustomer()
         {
-            _io.Output.Write("Enter their first name:");
-            string firstName = _io.Input.ReadInput();
+            ICustomer customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
-            _io.Output.Write("Enter their last name:");
-            string lastName = _io.Input.ReadInput();
-
-            List<Customer> customers = _database.CustomerDatabase.LookUpCustomer(firstName, lastName);
-
-            if (customers.Count == 0)
-            {
-                _io.Output.Write($"No customers found with the name {firstName} {lastName}.");
-                return;
-            }
-
-            if (customers.Count > 1)
-            {
-                _io.Output.Write($"More than one customer was found with the name {firstName} {lastName}");
-                return;
-            }
-
-            var selectedCustomer = customers[0];
-            var orders = _database.OrderHistory.SearchByCustomer(selectedCustomer);
-
-            DisplayOrders(orders, selectedCustomer);
+            var orders = _database.OrderHistory.SearchByCustomer(customer);
+            DisplayOrders(orders, customer);
         }
 
         private void SearchByLocation()
@@ -64,7 +44,7 @@ namespace StoreApp.IO.Terminal
         {
             if (orders.Count == 0)
             {
-                _io.Output.Write($"The customer '{customer}' has no orders on record.");
+                _io.Output.Write($"The customer '{customer.DisplayName()}' has no orders on record.");
                 return;
             }
 

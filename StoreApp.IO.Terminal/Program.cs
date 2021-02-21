@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using StoreApp.Library;
@@ -12,7 +13,9 @@ namespace StoreApp.IO.Terminal
 
         private static readonly MainDatabase _mainDatabase = new MainDatabase();
 
-        private const string CONNECTION_STRING_PATH = @"E:\Revature\Projects\digitalStore-connection-string.txt";
+        private const string CONNECTION_STRING_PATH = @"R:\Revature\Projects\digitalStore-connection-string.txt";
+
+        private const string CONNECTION_LOG_PATH = "connection_log.txt";
 
         private static async Task Main()
         {
@@ -27,7 +30,13 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Loading databases...");
             _mainDatabase.CustomerDatabase = await Serializer.DeserializeAsync<CustomerDatabase>(DatabasePaths.CUSTOMER_DATABASE_PATH);
             _mainDatabase.ConnectionString = await File.ReadAllTextAsync(CONNECTION_STRING_PATH);
-            _mainDatabase.Logger = (s) => System.Diagnostics.Debug.WriteLine(s);
+
+            _mainDatabase.Logger = (s) =>
+            {
+                Debug.WriteLine(s);
+                using StreamWriter writer = new StreamWriter(CONNECTION_LOG_PATH, append: true);
+                writer.WriteLine(s);
+            };
             io.Output.Write("Finished loading databases...");
             io.Output.Write();
         }

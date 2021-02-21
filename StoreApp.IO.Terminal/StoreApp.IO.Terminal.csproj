@@ -1,8 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Bryson Ewell</Authors>
+    <Company>Revature</Company>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,5 +12,4 @@
     <ProjectReference Include="..\StoreApp.Library\StoreApp.Library.csproj" />
     <ProjectReference Include="..\StoreApp.Serialization\StoreApp.Serialization.csproj" />
   </ItemGroup>
-
 </Project>
