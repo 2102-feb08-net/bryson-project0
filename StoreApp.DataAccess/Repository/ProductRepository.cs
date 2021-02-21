@@ -52,6 +52,8 @@ namespace StoreApp.DataAccess.Repository
 
             await context.PurchaseOrders.AddAsync(purchaseOrder);
 
+            var store = await context.StoreLocations.Include(s => s.Inventories).Where(s => s.Id == purchaseOrder.StoreLocationId).FirstOrDefaultAsync();
+
             await context.SaveChangesAsync();
 
             return AttemptResult.Success();

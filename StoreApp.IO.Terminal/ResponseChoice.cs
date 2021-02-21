@@ -8,6 +8,9 @@ namespace StoreApp.IO.Terminal
 {
     public class ResponseChoice
     {
+        /// <summary>
+        /// The list of options for the user to choose from.
+        /// </summary>
         public List<ChoiceOption> Options { get; private set; } = new List<ChoiceOption>();
 
         private ChoiceOption[] _currentOptions;

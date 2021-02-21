@@ -9,6 +9,11 @@ namespace StoreApp.Library
 {
     public static class OrderProcessor
     {
+        /// <summary>
+        /// Calculates the total price of the order by summing up the unit prices of each product in the order and multiplied by their quantity.
+        /// </summary>
+        /// <param name="order">The order to get the total price of.</param>
+        /// <returns>Returns the total price for the order.</returns>
         public static decimal CalculateTotalPrice(this IReadOnlyOrder order)
         {
             decimal total = 0;

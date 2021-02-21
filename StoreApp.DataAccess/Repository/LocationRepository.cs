@@ -21,7 +21,11 @@ namespace StoreApp.DataAccess.Repository
                 .Include(s => s.Inventories)
                 .ThenInclude(i => i.Product)
                 .Include(s => s.Address)
-                .FirstAsync(s => s.Name == name);
+                .FirstOrDefaultAsync(s => s.Name == name);
+
+            if (storeLocation == null)
+                return null;
+
             var inventoryPairs = storeLocation.Inventories.Select(
                 i => new KeyValuePair<Library.Model.IProduct, int>(
                     new Library.Model.ProductData(i.Product.Name, i.Product.Category, i.Product.UnitPrice),
