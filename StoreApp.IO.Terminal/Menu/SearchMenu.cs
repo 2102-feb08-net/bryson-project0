@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using StoreApp.Library;
 using StoreApp.Library.Model;
 
+using System.Linq;
+
 namespace StoreApp.IO.Terminal
 {
     public class SearchMenu : Menu
