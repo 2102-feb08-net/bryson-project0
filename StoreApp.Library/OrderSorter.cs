@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
+    /// <summary>
+    /// Helper methods to allow IReadOnlyOrders to be easily sorted according to various methods.
+    /// </summary>
     public static class OrderSorter
     {
         /// <summary>

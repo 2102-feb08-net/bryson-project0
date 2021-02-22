@@ -10,6 +10,6 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="name">The name of the location.</param>
         /// <returns>Returns the location with the given name.</returns>
-        Task<Location> LookUpLocationByNameAsync(string name);
+        Task<ILocation> LookUpLocationByNameAsync(string name);
     }
 }

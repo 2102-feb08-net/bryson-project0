@@ -7,6 +7,9 @@ using StoreApp.Library.Model;
 
 namespace StoreApp.Library
 {
+    /// <summary>
+    /// Helper class to provide additional functionality to orders
+    /// </summary>
     public static class OrderProcessor
     {
         /// <summary>

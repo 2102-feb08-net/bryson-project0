@@ -22,7 +22,7 @@ namespace StoreApp.Library.Model
 
         public int? Id => null;
 
-        public Order(ICustomer customer, Location storeLocation)
+        public Order(ICustomer customer, ILocation storeLocation)
         {
             Customer = customer ?? throw new ArgumentNullException(nameof(customer), "Customer cannot be null.");
             StoreLocation = storeLocation ?? throw new ArgumentNullException(nameof(storeLocation), "Store location cannot be null.");

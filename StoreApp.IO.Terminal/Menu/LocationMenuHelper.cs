@@ -11,14 +11,14 @@ namespace StoreApp.IO.Terminal
 {
     public class LocationMenuHelper
     {
-        public static async Task<Location> LookUpLocation(IIOController io, MainDatabase database)
+        public static async Task<ILocation> LookUpLocation(IIOController io, MainDatabase database)
         {
             io.Output.Write("Enter the name of the location:");
             string locationName = io.Input.ReadInput();
 
             ILocationRepository repo = database.LocationRepository;
 
-            Location location = await repo.LookUpLocationByNameAsync(locationName);
+            ILocation location = await repo.LookUpLocationByNameAsync(locationName);
 
             if (location is null)
             {

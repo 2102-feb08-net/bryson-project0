@@ -23,7 +23,7 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="name">The name of the location.</param>
         /// <returns>Returns the location with the given name.</returns>
-        public async Task<Library.Model.Location> LookUpLocationByNameAsync(string name)
+        public async Task<Library.Model.ILocation> LookUpLocationByNameAsync(string name)
         {
             using var context = new DigitalStoreContext(Options);
 
@@ -43,7 +43,7 @@ namespace StoreApp.DataAccess.Repository
 
             var inventoryDictionary = inventoryPairs.ToDictionary((keyItem) => (keyItem).Key, (valueItem) => valueItem.Value);
 
-            Library.Model.Location location = new()
+            Library.Model.ILocation location = new Library.Model.Location()
             {
                 Name = storeLocation.Name,
                 Address = storeLocation.Address.Print(),

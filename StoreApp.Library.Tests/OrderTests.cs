@@ -10,7 +10,7 @@ namespace StoreApp.Library.Tests
 
         private readonly IProduct product = new ProductData(name: "Apple", category: "Food", unitPrice: 1.29m);
 
-        private readonly Location location = new Location();
+        private readonly ILocation location = new Location();
 
         [Fact]
         public void Order_Constructor_Success()

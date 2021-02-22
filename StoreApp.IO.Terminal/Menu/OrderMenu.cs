@@ -34,7 +34,7 @@ namespace StoreApp.IO.Terminal
             if (customer is null)
                 return;
 
-            Location location = await AttemptAddLocationToOrder();
+            ILocation location = await AttemptAddLocationToOrder();
 
             if (location is null)
                 return;
@@ -72,9 +72,9 @@ namespace StoreApp.IO.Terminal
             return customer;
         }
 
-        private async Task<Location> AttemptAddLocationToOrder()
+        private async Task<ILocation> AttemptAddLocationToOrder()
         {
-            Location location = null;
+            ILocation location = null;
             bool tryAgain;
 
             do

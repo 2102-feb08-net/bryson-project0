@@ -6,7 +6,7 @@ namespace StoreApp.Library.Tests
 {
     public class LocationTests
     {
-        private readonly Location location = new Location();
+        private readonly ILocation location = new Location();
 
         private readonly IProduct apple = new ProductData(name: "Apple", category: "Food", unitPrice: 1.29m);
         private readonly IProduct banana = new ProductData(name: "Banana", category: "Food", unitPrice: 0.79m);
