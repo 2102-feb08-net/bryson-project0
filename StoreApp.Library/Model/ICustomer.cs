@@ -10,6 +10,6 @@ namespace StoreApp.Library.Model
 
         string LastName { get; }
 
-        string DisplayName() => $"{FirstName} {LastName}";
+        public string DisplayName() => $"{FirstName} {LastName}";
     }
 }

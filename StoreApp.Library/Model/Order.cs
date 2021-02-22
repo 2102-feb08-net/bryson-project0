@@ -24,8 +24,8 @@ namespace StoreApp.Library.Model
 
         public Order(ICustomer customer, Location storeLocation)
         {
-            Customer = customer ?? throw new NullReferenceException();
-            StoreLocation = storeLocation ?? throw new NullReferenceException();
+            Customer = customer ?? throw new ArgumentNullException();
+            StoreLocation = storeLocation ?? throw new ArgumentNullException();
         }
 
         public void SetProductToOrder(IProduct product, int quantity)

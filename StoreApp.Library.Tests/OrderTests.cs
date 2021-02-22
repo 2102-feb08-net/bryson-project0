@@ -6,7 +6,7 @@ namespace StoreApp.Library.Tests
 {
     public class OrderTests
     {
-        private readonly ICustomer customer = new Customer() { FirstName = "John", LastName = "Doe" };
+        private readonly ICustomer customer = new Customer(firstName: "John", lastName: "Doe", id: 1);
 
         private readonly IProduct product = new ProductData(name: "Apple", category: "Food", unitPrice: 1.29m);
 
@@ -33,7 +33,7 @@ namespace StoreApp.Library.Tests
             Order constructor() => new Order(null, location);
 
             // assert
-            Assert.Throws<NullReferenceException>(constructor);
+            Assert.Throws<ArgumentNullException>(constructor);
         }
 
         [Fact]
@@ -45,14 +45,14 @@ namespace StoreApp.Library.Tests
             Order constructor() => new Order(customer, null);
 
             // assert
-            Assert.Throws<NullReferenceException>(constructor);
+            Assert.Throws<ArgumentNullException>(constructor);
         }
 
         [Theory]
         [InlineData(2)]
         [InlineData(Order.MIN_QUANTITY_PER_ORDER)]
         [InlineData(Order.MAX_QUANTITY_PER_ORDER)]
-        public void Order_AddProductToOrder_Success(int quantity)
+        public void Order_AddProductToOrder_Pass(int quantity)
         {
             // arrange
             Order order = new Order(customer, location);
@@ -83,7 +83,6 @@ namespace StoreApp.Library.Tests
 
         [Theory]
         [InlineData(Order.MAX_QUANTITY_PER_ORDER + 1)]
-        [InlineData(100)]
         public void Order_AddExcessiveProductQuantity_Fail(int quantity)
         {
             // arrange

@@ -60,7 +60,7 @@ namespace StoreApp.IO.Terminal
                 return;
             }
 
-            DisplayOrders(orders);
+            await DisplayOrdersWithSortOptions(orders);
         }
 
         private async Task SearchOrdersByLocation()
@@ -76,10 +76,27 @@ namespace StoreApp.IO.Terminal
                 _io.Output.Write($"No orders were found on record for '{name}'. Either no records have ever occured or the location does not exist.");
                 return;
             }
-            DisplayOrders(orders);
+            await DisplayOrdersWithSortOptions(orders);
         }
 
-        private void DisplayOrders(List<IReadOnlyOrder> orders)
+        private async Task DisplayOrdersWithSortOptions(IEnumerable<IReadOnlyOrder> orders)
+        {
+            bool isSearching = true;
+            do
+            {
+                DisplayOrders(orders);
+
+                ResponseChoice response = new ResponseChoice(_io);
+                response.Options.Add(new ChoiceOption("Sort by earliest order time", () => orders = orders.SortByEarliest()));
+                response.Options.Add(new ChoiceOption("Sort by latest order time", () => orders = orders.SortByLatest()));
+                response.Options.Add(new ChoiceOption("Sort by cheapest total price", () => orders = orders.SortByCheapest()));
+                response.Options.Add(new ChoiceOption("Sort by most expensive total price", () => orders = orders.SortByMostExpensive()));
+                response.Options.Add(new ChoiceOption("Stop searching", () => isSearching = false));
+                await response.ShowAndInvokeOptions();
+            } while (isSearching);
+        }
+
+        private void DisplayOrders(IEnumerable<IReadOnlyOrder> orders)
         {
             OrderDisplayer displayer = new OrderDisplayer();
             foreach (string display in displayer.GetBatchOrderDisplay(orders))

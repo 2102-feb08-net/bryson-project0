@@ -15,14 +15,15 @@ namespace StoreApp.Library.Model
         public Customer(string firstName, string lastName, int id)
         {
             if (string.IsNullOrEmpty(firstName))
-                throw new ArgumentException("A customer must have a first name that is not null or empty.");
+                throw new ArgumentNullException("A customer must have a first name that is not null or empty.");
 
             FirstName = firstName ?? throw new NullReferenceException();
             LastName = lastName;
 
+            if (id <= 0)
+                throw new ArgumentException("ID must be greater than or equal to 1.");
+
             Id = id;
         }
-
-        public Customer() { }
     }
 }

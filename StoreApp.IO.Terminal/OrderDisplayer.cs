@@ -42,7 +42,7 @@ namespace StoreApp.IO.Terminal
             return sb.ToString();
         }
 
-        public IEnumerable<string> GetBatchOrderDisplay(List<IReadOnlyOrder> orders)
+        public IEnumerable<string> GetBatchOrderDisplay(IEnumerable<IReadOnlyOrder> orders)
         {
             foreach (var order in orders)
             {
