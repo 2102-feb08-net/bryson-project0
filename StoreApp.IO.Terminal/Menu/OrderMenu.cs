@@ -31,12 +31,12 @@ namespace StoreApp.IO.Terminal
         private async Task CreateOrder()
         {
             Customer customer = await AttemptAddCustomerToNewOrder();
-            if (customer == null)
+            if (customer is null)
                 return;
 
             Location location = await AttemptAddLocationToOrder();
 
-            if (location == null)
+            if (location is null)
                 return;
 
             _currentOrder = new Order(customer, location);
@@ -65,7 +65,7 @@ namespace StoreApp.IO.Terminal
 
                 customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
-                if (customer == null)
+                if (customer is null)
                     await TryAgain(() => tryAgain = true);
             } while (tryAgain);
 
@@ -83,7 +83,7 @@ namespace StoreApp.IO.Terminal
 
                 location = await LocationMenuHelper.LookUpLocation(_io, _database);
 
-                if (location == null)
+                if (location is null)
                     await TryAgain(() => tryAgain = true);
             } while (tryAgain);
 
@@ -101,7 +101,7 @@ namespace StoreApp.IO.Terminal
         private async Task AddNewProductToOrder()
         {
             IProduct product = await ProductMenuHelper.LookUpProductAsync(_io, _database);
-            if (product == null)
+            if (product is null)
                 return;
 
             if (!ProductMenuHelper.TryEnterProductQuantity(_io, out int quantity))
@@ -109,7 +109,11 @@ namespace StoreApp.IO.Terminal
 
             AttemptResult successAttempt = _currentOrder.TryAddProductToOrder(product, quantity);
             if (!successAttempt)
-                _io.Output.Write(successAttempt.FailureMessage);
+            {
+                _io.Output.Write($"ERROR: {successAttempt.FailureMessage}");
+                _io.Output.Write("No additional products were added to the order.");
+                _io.PressEnterToContinue();
+            }
         }
 
         private void CancelOrder()
@@ -120,14 +124,13 @@ namespace StoreApp.IO.Terminal
 
         private void CheckStatus()
         {
-            OrderDisplayer displayer = new OrderDisplayer();
-            string display = displayer.GetOrderDisplay(_currentOrder);
+            string display = OrderDisplayer.GetOrderDisplay(_currentOrder);
             _io.Output.Write(display);
         }
 
         public async Task TrySubmitOrder()
         {
-            ProductRepository repo = new ProductRepository(_database.ConnectionString, _database.Logger);
+            IOrderRepository repo = _database.OrderRepository;
 
             try
             {

@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace StoreApp.DataAccess.Repository
 {
-    public class CustomerRepository : BaseRepository
+    public class CustomerRepository : BaseRepository, ICustomerRepository
     {
+        /// <summary>
+        /// Constructs a new Customer Repository
+        /// </summary>
+        /// <param name="connectionString">The connection string to connect to the database.</param>
+        /// <param name="logger">The logger to log the connection.</param>
         public CustomerRepository(string connectionString, Action<string> logger) : base(connectionString, logger)
         {
         }

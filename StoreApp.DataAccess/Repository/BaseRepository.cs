@@ -13,8 +13,6 @@ namespace StoreApp.DataAccess.Repository
 
         protected Action<string> Logger { get; private set; }
 
-        private const int STARTING_ID = 1;
-
         public BaseRepository(string connectionString, Action<string> logger)
         {
             Options = CreateOptions<DigitalStoreContext>(connectionString, logger);
@@ -30,12 +28,6 @@ namespace StoreApp.DataAccess.Repository
                 optionsBuilder.LogTo(logger, Microsoft.Extensions.Logging.LogLevel.Information);
 
             return optionsBuilder.Options;
-        }
-
-        protected static async Task<int> GenerateNextIdAsync<T>(IQueryable<T> query) where T : Library.Model.IIdentifiable
-        {
-            var lastObj = await query.OrderBy(q => q.Id).LastOrDefaultAsync();
-            return lastObj != null ? lastObj.Id + 1 : STARTING_ID;
         }
     }
 }

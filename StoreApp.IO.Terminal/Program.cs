@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using StoreApp.DataAccess.Repository;
 using StoreApp.Library;
 
 namespace StoreApp.IO.Terminal
@@ -34,14 +35,20 @@ namespace StoreApp.IO.Terminal
         private static async Task LoadDatabases()
         {
             io.Output.Write("Loading databases...");
-            _mainDatabase.ConnectionString = await File.ReadAllTextAsync(CONNECTION_STRING_PATH);
+            string connectionString = await File.ReadAllTextAsync(CONNECTION_STRING_PATH);
 
-            _mainDatabase.Logger = (s) =>
+            static void logger(string s)
             {
                 Debug.WriteLine(s);
                 using StreamWriter writer = new StreamWriter(CONNECTION_LOG_PATH, append: true);
                 writer.WriteLine(s);
-            };
+            }
+
+            _mainDatabase.CustomerRepository = new CustomerRepository(connectionString, logger);
+            _mainDatabase.LocationRepository = new LocationRepository(connectionString, logger);
+            _mainDatabase.OrderRepository = new OrderRepository(connectionString, logger);
+            _mainDatabase.ProductRepository = new ProductRepository(connectionString, logger);
+
             io.Output.Write("Finished loading databases...");
             io.Output.Write();
         }

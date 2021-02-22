@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using StoreApp.Library;
 using StoreApp.Library.Model;
-
-using System.Linq;
 
 using StoreApp.DataAccess.Repository;
 
@@ -51,7 +47,10 @@ namespace StoreApp.IO.Terminal
         {
             ICustomer customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
-            OrderRepository repo = new OrderRepository(_database.ConnectionString, _database.Logger);
+            if (customer is null)
+                return;
+
+            IOrderRepository repo = _database.OrderRepository;
             var orders = await repo.GetOrdersFromCustomer(customer);
 
             if (orders.Count == 0)
@@ -68,7 +67,7 @@ namespace StoreApp.IO.Terminal
             _io.Output.Write("Enter the name of the store location:");
             string name = _io.Input.ReadInput();
 
-            OrderRepository repo = new OrderRepository(_database.ConnectionString, _database.Logger);
+            IOrderRepository repo = _database.OrderRepository;
             var orders = await repo.GetOrdersFromLocation(name);
 
             if (orders.Count == 0)
@@ -98,8 +97,7 @@ namespace StoreApp.IO.Terminal
 
         private void DisplayOrders(IEnumerable<IReadOnlyOrder> orders)
         {
-            OrderDisplayer displayer = new OrderDisplayer();
-            foreach (string display in displayer.GetBatchOrderDisplay(orders))
+            foreach (string display in OrderDisplayer.GetBatchOrderDisplay(orders))
                 _io.Output.Write(display);
         }
     }

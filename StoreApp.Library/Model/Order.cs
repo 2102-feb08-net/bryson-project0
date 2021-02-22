@@ -24,8 +24,8 @@ namespace StoreApp.Library.Model
 
         public Order(ICustomer customer, Location storeLocation)
         {
-            Customer = customer ?? throw new ArgumentNullException();
-            StoreLocation = storeLocation ?? throw new ArgumentNullException();
+            Customer = customer ?? throw new ArgumentNullException(nameof(customer), "Customer cannot be null.");
+            StoreLocation = storeLocation ?? throw new ArgumentNullException(nameof(storeLocation), "Store location cannot be null.");
         }
 
         public void SetProductToOrder(IProduct product, int quantity)
@@ -39,25 +39,10 @@ namespace StoreApp.Library.Model
             _shoppingCartQuantity[product] = quantity;
         }
 
-        public void AddProductToOrder(IProduct product)
-        {
-            if (_shoppingCartQuantity.ContainsKey(product))
-            {
-                int quantity = _shoppingCartQuantity[product];
-
-                if (quantity + 1 > MAX_QUANTITY_PER_ORDER)
-                    throw new ArgumentException($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order.");
-
-                _shoppingCartQuantity[product]++;
-            }
-            else
-                _shoppingCartQuantity.Add(product, 1);
-        }
-
         public AttemptResult TryAddProductToOrder(IProduct product, int quantity = 1)
         {
             if (quantity < MIN_QUANTITY_PER_ORDER)
-                return AttemptResult.Fail("Quantity must be great than 0 for an order.");
+                return AttemptResult.Fail("Quantity must be an integer greater than or equal to 1 for an order.");
 
             int totalProductQuantity = quantity;
 
@@ -67,7 +52,7 @@ namespace StoreApp.Library.Model
 
             if (totalProductQuantity > MAX_QUANTITY_PER_ORDER)
             {
-                return AttemptResult.Fail($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order, yet you are attempting to order {totalProductQuantity}.\nYou may already the product in your cart.");
+                return AttemptResult.Fail($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order, yet you are attempting to order {totalProductQuantity}.\nThe product may have already been added to your order previously.");
             }
 
             if (!StoreLocation.IsProductAvailable(product, totalProductQuantity))

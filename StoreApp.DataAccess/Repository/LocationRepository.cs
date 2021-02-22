@@ -7,12 +7,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StoreApp.DataAccess.Repository
 {
-    public class LocationRepository : BaseRepository
+    public class LocationRepository : BaseRepository, ILocationRepository
     {
+        /// <summary>
+        /// Constructs a new Location Repository
+        /// </summary>
+        /// <param name="connectionString">The connection string to connect to the database.</param>
+        /// <param name="logger">The logger to log the connection.</param>
         public LocationRepository(string connectionString, Action<string> logger) : base(connectionString, logger)
         {
         }
 
+        /// <summary>
+        /// Gets the location by a given name.
+        /// </summary>
+        /// <param name="name">The name of the location.</param>
+        /// <returns>Returns the location with the given name.</returns>
         public async Task<Library.Model.Location> LookUpLocationByNameAsync(string name)
         {
             using var context = new DigitalStoreContext(Options);
@@ -23,7 +33,7 @@ namespace StoreApp.DataAccess.Repository
                 .Include(s => s.Address)
                 .FirstOrDefaultAsync(s => s.Name == name);
 
-            if (storeLocation == null)
+            if (storeLocation is null)
                 return null;
 
             var inventoryPairs = storeLocation.Inventories.Select(

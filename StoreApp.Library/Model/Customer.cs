@@ -15,7 +15,7 @@ namespace StoreApp.Library.Model
         public Customer(string firstName, string lastName, int id)
         {
             if (string.IsNullOrEmpty(firstName))
-                throw new ArgumentNullException("A customer must have a first name that is not null or empty.");
+                throw new ArgumentNullException(nameof(firstName), "A customer must have a first name that is not null or empty.");
 
             FirstName = firstName ?? throw new NullReferenceException();
             LastName = lastName;

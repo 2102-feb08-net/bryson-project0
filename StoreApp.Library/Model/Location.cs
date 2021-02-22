@@ -21,19 +21,13 @@ namespace StoreApp.Library.Model
         /// <param name="product">The product to check for</param>
         /// <param name="quantity">The number of the product</param>
         /// <returns>Whether the location has the product and at least said quantity in stock</returns>
-        public bool IsProductAvailable(IProduct product, int quantity)
-        {
-            return Inventory.ContainsKey(product) && Inventory[product] >= quantity;
-        }
+        public bool IsProductAvailable(IProduct product, int quantity) => Inventory.ContainsKey(product) && Inventory[product] >= quantity;
 
         /// <summary>
         /// Gets the amount of available stock of the product at the location.
         /// </summary>
         /// <param name="product">The product you want to check the stock of.</param>
         /// <returns>Returns the quantity of the product available</returns>
-        public int GetAvailableStock(IProduct product)
-        {
-            return Inventory.ContainsKey(product) ? Inventory[product] : 0;
-        }
+        public int GetAvailableStock(IProduct product) => Inventory.ContainsKey(product) ? Inventory[product] : 0;
     }
 }

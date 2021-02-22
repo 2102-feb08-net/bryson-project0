@@ -16,11 +16,11 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Enter the name of the product:");
             string productName = io.Input.ReadInput();
 
-            ProductRepository repo = new ProductRepository(database.ConnectionString, database.Logger);
+            IProductRepository repo = database.ProductRepository;
 
             IProduct product = await repo.LookupProductFromName(productName);
 
-            if (product == null)
+            if (product is null)
             {
                 io.Output.Write($"A product with the name '{productName}' could not be found. The results are case-sensitive.");
             }
@@ -29,16 +29,19 @@ namespace StoreApp.IO.Terminal
         }
 
         /// <summary>
-        ///
+        /// A helper method to ask for the quantity of a product and then prompt for user input to be converted to an integer..
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>Does not do any validation on the integer value (i.e less than 0)</remarks>
+        /// <param name="io">IO controller to output and input text.</param>
+        /// <param name="quantity">The quantity converted from the users input.</param>
+        /// <returns>Returns whether it was successful in converting the user input into an int.</returns>
         public static bool TryEnterProductQuantity(IIOController io, out int quantity)
         {
             io.Output.Write("Enter the quantity of the product:");
             string quantityString = io.Input.ReadInput();
             if (!int.TryParse(quantityString, out quantity))
             {
-                io.Output.Write("Quantity must be an integer number");
+                io.Output.Write("Quantity must be an integer number.");
                 return false;
             }
 

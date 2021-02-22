@@ -32,6 +32,11 @@ namespace StoreApp.IO.Terminal
         /// <param name="options">The options that the user can choose</param>
         public async Task ShowAndInvokeOptions(params ChoiceOption[] options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             _currentOptions = new ChoiceOption[Options.Count];
             Options.CopyTo(_currentOptions);
 

@@ -48,11 +48,10 @@ namespace StoreApp.IO.Terminal
             _io.Output.Write("Enter their last name:");
             string lastName = _io.Input.ReadInput();
 
-            CustomerRepository repo = new CustomerRepository(_mainDatabase.ConnectionString, _mainDatabase.Logger);
-            //_mainDatabase.CustomerDatabase.Customers.Add(new Customer(firstName, lastName));
+            ICustomerRepository repo = _mainDatabase.CustomerRepository;
+
             _io.Output.Write("Adding customer...");
             bool success = await repo.TryCreateCustomerAsync(firstName, lastName);
-            //Serializer.SerializeAsync(_mainDatabase.CustomerDatabase, DatabasePaths.CUSTOMER_DATABASE_PATH).GetAwaiter().GetResult();
 
             if (success)
                 _io.Output.Write($"'{firstName} {lastName}' has been added to the database.");

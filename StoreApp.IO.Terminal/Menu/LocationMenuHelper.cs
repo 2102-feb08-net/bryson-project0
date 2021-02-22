@@ -16,11 +16,11 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Enter the name of the location:");
             string locationName = io.Input.ReadInput();
 
-            LocationRepository repo = new LocationRepository(database.ConnectionString, database.Logger);
+            ILocationRepository repo = database.LocationRepository;
 
             Location location = await repo.LookUpLocationByNameAsync(locationName);
 
-            if (location == null)
+            if (location is null)
             {
                 io.Output.Write($"No location found with the name '{locationName}'");
                 return null;

@@ -52,10 +52,7 @@ namespace StoreApp.Library
         /// An implicit operator to a boolean. This is to allow easy use as a return in a TryXXX() method.
         /// </summary>
         /// <param name="result">Returns true if the result is a success, otherwise false.</param>
-        public static implicit operator bool(AttemptResult result)
-        {
-            return result != null && result.Result == ResultState.Success;
-        }
+        public static implicit operator bool(AttemptResult result) => result != null && result.Result == ResultState.Success;
     }
 
     public enum ResultState

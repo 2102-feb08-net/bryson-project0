@@ -19,7 +19,7 @@ namespace StoreApp.IO.Terminal
             io.Output.Write("Enter their last name:");
             string lastName = io.Input.ReadInput();
 
-            CustomerRepository repo = new CustomerRepository(database.ConnectionString, database.Logger);
+            ICustomerRepository repo = database.CustomerRepository;
             List<Customer> customers = await repo.LookUpCustomersByNameAsync(firstName, lastName);
 
             if (customers.Count == 0)
@@ -47,7 +47,7 @@ namespace StoreApp.IO.Terminal
                 return null;
             }
 
-            CustomerRepository repo = new CustomerRepository(database.ConnectionString, database.Logger);
+            ICustomerRepository repo = database.CustomerRepository;
 
             List<ICustomer> customers = await repo.SearchCustomersAsync(searchQuery);
 

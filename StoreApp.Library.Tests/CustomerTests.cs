@@ -36,7 +36,9 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            void createCustomer() => new Customer(null, "Doe", 1);
+#pragma warning disable CA1806
+            static void createCustomer() => new Customer(null, "Doe", 1);
+#pragma warning restore CA1806
 
             // assert
             Assert.Throws<ArgumentNullException>(createCustomer);

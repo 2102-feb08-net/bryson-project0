@@ -95,8 +95,6 @@ RETURN (
 END
 GO
 
-
-
 INSERT INTO Product (Name, Category, UnitPrice) VALUES
 	('Apple', 'Food', 1.29),
 	('Banana', 'Food', 0.79),

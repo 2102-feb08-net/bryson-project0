@@ -10,7 +10,7 @@ namespace StoreApp.IO.Terminal
 {
     public class OrderDisplayer
     {
-        public string GetOrderDisplay(IReadOnlyOrder order)
+        public static string GetOrderDisplay(IReadOnlyOrder order)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -30,19 +30,19 @@ namespace StoreApp.IO.Terminal
             {
                 IProduct product = pair.Key;
                 int quantity = pair.Value;
-                sb.AppendLine($"\t|{product.Name,-28} | {product.Category,-17} | {quantity,-8} | ${product.UnitPrice.ToString("0.##"),-23}|");
+                sb.AppendLine($"\t|{product.Name,-28} | {product.Category,-17} | {quantity,-8} | ${product.UnitPrice,-23:0.##}|");
             }
 
             if (order.ShoppingCartQuantity.Count == 0)
                 sb.AppendLine("\t| There are currently no items in this order.                                          |");
             sb.AppendLine($"\t|--------------------------------------------------------------------------------------|");
-            sb.AppendLine($"\t|Total: ${OrderProcessor.CalculateTotalPrice(order).ToString("0.##"),-78}|");
+            sb.AppendLine($"\t|Total: ${OrderProcessor.CalculateTotalPrice(order),-78:0.##}|");
             sb.AppendLine($"\t----------------------------------------------------------------------------------------");
 
             return sb.ToString();
         }
 
-        public IEnumerable<string> GetBatchOrderDisplay(IEnumerable<IReadOnlyOrder> orders)
+        public static IEnumerable<string> GetBatchOrderDisplay(IEnumerable<IReadOnlyOrder> orders)
         {
             foreach (var order in orders)
             {
