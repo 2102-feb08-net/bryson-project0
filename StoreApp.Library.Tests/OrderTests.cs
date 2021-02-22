@@ -49,7 +49,7 @@ namespace StoreApp.Library.Tests
         }
 
         [Theory]
-        [InlineData(2)]
+        [InlineData(4)]
         [InlineData(Order.MIN_QUANTITY_PER_ORDER)]
         [InlineData(Order.MAX_QUANTITY_PER_ORDER)]
         public void Order_AddProductToOrder_Pass(int quantity)
@@ -58,12 +58,12 @@ namespace StoreApp.Library.Tests
             Order order = new Order(customer, location);
 
             // act
-            order.SetProductToOrder(product, quantity);
+            bool success = order.TryAddProductToOrder(product, quantity);
 
             bool foundOrder = order.ShoppingCartQuantity.TryGetValue(product, out int quantityAdded);
 
             // assert
-            Assert.True(foundOrder && quantity == quantityAdded);
+            Assert.True(success && foundOrder && quantity == quantityAdded);
         }
 
         [Theory]
@@ -75,10 +75,10 @@ namespace StoreApp.Library.Tests
             Order order = new Order(customer, location);
 
             // act
-            void addToOrder() => order.SetProductToOrder(product, quantity);
+            bool success = order.TryAddProductToOrder(product, quantity);
 
             // assert
-            Assert.Throws<ArgumentException>(addToOrder);
+            Assert.False(success);
         }
 
         [Theory]
@@ -89,10 +89,10 @@ namespace StoreApp.Library.Tests
             Order order = new Order(customer, location);
 
             // act
-            void addToOrder() => order.SetProductToOrder(product, quantity);
+            bool success = order.TryAddProductToOrder(product, quantity);
 
             // assert
-            Assert.Throws<ArgumentException>(addToOrder);
+            Assert.False(success);
         }
     }
 }

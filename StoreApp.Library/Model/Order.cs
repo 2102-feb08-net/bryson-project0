@@ -28,17 +28,6 @@ namespace StoreApp.Library.Model
             StoreLocation = storeLocation ?? throw new ArgumentNullException(nameof(storeLocation), "Store location cannot be null.");
         }
 
-        public void SetProductToOrder(IProduct product, int quantity)
-        {
-            if (quantity < MIN_QUANTITY_PER_ORDER)
-                throw new ArgumentException("Quantity must be great than 0 for an order.");
-
-            if (quantity > MAX_QUANTITY_PER_ORDER)
-                throw new ArgumentException($"Cannot order more than {MAX_QUANTITY_PER_ORDER} in a single order.");
-
-            _shoppingCartQuantity[product] = quantity;
-        }
-
         public AttemptResult TryAddProductToOrder(IProduct product, int quantity = 1)
         {
             if (quantity < MIN_QUANTITY_PER_ORDER)

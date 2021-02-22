@@ -41,6 +41,12 @@ namespace StoreApp.Library
         /// <returns></returns>
         public static AttemptResult Fail(string failMessage)
         {
+            if (failMessage is null)
+                throw new ArgumentNullException(paramName: nameof(failMessage), message: "Fail message cannot be null.");
+
+            if (string.IsNullOrWhiteSpace(failMessage))
+                throw new ArgumentException(message: "Fail message cannot be empty or whitespace.", paramName: nameof(failMessage));
+
             return new AttemptResult()
             {
                 Result = ResultState.Fail,
@@ -55,6 +61,9 @@ namespace StoreApp.Library
         public static implicit operator bool(AttemptResult result) => result != null && result.Result == ResultState.Success;
     }
 
+    /// <summary>
+    /// A state for AttemptResult to show whether it is a fail or success.
+    /// </summary>
     public enum ResultState
     {
         Fail,
