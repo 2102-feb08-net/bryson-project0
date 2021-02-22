@@ -8,5 +8,8 @@ namespace StoreApp.Library
 {
     public class OrderSorter
     {
+        public void SortByEarliest()
+        {
+        }
     }
 }

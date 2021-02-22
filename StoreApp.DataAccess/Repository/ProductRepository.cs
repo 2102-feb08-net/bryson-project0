@@ -12,22 +12,31 @@ namespace StoreApp.DataAccess.Repository
 {
     public class ProductRepository : BaseRepository
     {
+        /// <summary>
+        /// Constructor for a new Product Repository
+        /// </summary>
+        /// <param name="connectionString">The connection string to connect to the database.</param>
+        /// <param name="logger">The logger to log the connection.</param>
         public ProductRepository(string connectionString, Action<string> logger) : base(connectionString, logger)
         {
         }
 
-        public async Task<AttemptResult> TryOrderTransaction(IOrder order)
+        /// <summary>
+        /// Sends and process an order to the database.
+        /// </summary>
+        /// <param name="order">The order to process</param>
+        public async Task SendOrderTransaction(IOrder order)
         {
             using var context = new DigitalStoreContext(Options);
 
             if (order.ShoppingCartQuantity.Count == 0)
-                return AttemptResult.Fail("Cannot submit order with no products in cart.");
+                throw new OrderException("Cannot submit order with no products in cart.");
 
             var productNames = order.ShoppingCartQuantity.Keys.Select(s => s.Name).ToList();
             var foundProducts = await context.Products.Where(p => productNames.Contains(p.Name)).ToListAsync();
 
             if (productNames.Count != foundProducts.Count)
-                return AttemptResult.Fail("Product in cart did not exist in the database.");
+                throw new OrderException("One or more Products in cart did not exist in the database.");
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
             {
@@ -38,25 +47,40 @@ namespace StoreApp.DataAccess.Repository
                 StoreLocationId = order.StoreLocation.Id
             };
 
+            var inventories = await context.Inventories
+                .Where(i => i.StoreId == purchaseOrder.StoreLocationId).ToListAsync();
+
             foreach (var productQuantity in order.ShoppingCartQuantity)
             {
                 var product = productQuantity.Key;
                 int quantity = productQuantity.Value;
+
+                if (quantity <= 0)
+                    throw new OrderException("Cannot order products with a quantity less than or equal to 0.");
+
+                Product foundProduct = foundProducts.Find(p => p.Name == product.Name);
+
+                var inventory = inventories.Where(i => i.ProductId == foundProduct.Id).FirstOrDefault();
+
+                if (inventory == null)
+                    throw new OrderException($"Store location does not contain the product '{product.Name}' in its inventory.");
+
+                if (inventory.Quantity >= quantity)
+                    inventory.Quantity -= quantity;
+                else
+                    throw new OrderException($"The store location only has {inventory.Quantity} of '{inventory.Product.Name}' in stock, but the order is requesting to order {quantity} of the product.");
+
                 purchaseOrder.OrderLines.Add(new OrderLine()
                 {
                     Quantity = quantity,
-                    Product = foundProducts.Find(p => p.Name == product.Name),
+                    Product = foundProduct,
                     PurchaseOrder = purchaseOrder
                 });
             }
 
             await context.PurchaseOrders.AddAsync(purchaseOrder);
 
-            var store = await context.StoreLocations.Include(s => s.Inventories).Where(s => s.Id == purchaseOrder.StoreLocationId).FirstOrDefaultAsync();
-
             await context.SaveChangesAsync();
-
-            return AttemptResult.Success();
         }
 
         public async Task<IProduct> LookupProductFromName(string name)

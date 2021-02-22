@@ -10,6 +10,5 @@
   <ItemGroup>
     <ProjectReference Include="..\StoreApp.DataAccess\StoreApp.DataAccess.csproj" />
     <ProjectReference Include="..\StoreApp.Library\StoreApp.Library.csproj" />
-    <ProjectReference Include="..\StoreApp.Serialization\StoreApp.Serialization.csproj" />
   </ItemGroup>
 </Project>

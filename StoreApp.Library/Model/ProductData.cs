@@ -12,6 +12,12 @@ namespace StoreApp.Library.Model
 
         public decimal UnitPrice { get; }
 
+        /// <summary>
+        /// Constructs a new ProductData
+        /// </summary>
+        /// <param name="name">The name of the product.</param>
+        /// <param name="category">The category of the product.</param>
+        /// <param name="unitPrice">The price in USD of the product.</param>
         public ProductData(string name, string category, decimal unitPrice)
         {
             Name = name ?? throw new NullReferenceException();

@@ -127,15 +127,18 @@ namespace StoreApp.IO.Terminal
 
         public async Task TrySubmitOrder()
         {
-            buildingOrder = false;
-
             ProductRepository repo = new ProductRepository(_database.ConnectionString, _database.Logger);
-            AttemptResult successAttempt = await repo.TryOrderTransaction(_currentOrder);
 
-            if (successAttempt)
+            try
+            {
+                await repo.SendOrderTransaction(_currentOrder);
                 _io.Output.Write("Order submitted successfully!");
-            else
-                _io.Output.Write($"Order Failed: {successAttempt.FailureMessage}");
+                buildingOrder = false;
+            }
+            catch (OrderException e)
+            {
+                _io.Output.Write($"Order Failed: {e.Message}");
+            }
         }
     }
 }

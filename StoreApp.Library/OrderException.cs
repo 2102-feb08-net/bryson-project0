@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
-    public class ShoppingCart
+    public class OrderException : Exception
     {
+        public OrderException(string message) : base(message)
+        {
+        }
     }
 }
