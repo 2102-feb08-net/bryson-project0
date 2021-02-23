@@ -43,20 +43,43 @@ namespace StoreApp.IO.Terminal
 
         private async Task AddCustomer()
         {
-            _io.Output.Write("Enter their first name:");
-            string firstName = _io.Input.ReadInput();
-            _io.Output.Write("Enter their last name:");
-            string lastName = _io.Input.ReadInput();
-
             ICustomerRepository repo = _mainDatabase.CustomerRepository;
 
-            _io.Output.Write("Adding customer...");
-            bool success = await repo.TryCreateCustomerAsync(firstName, lastName);
+            INewCustomer customer = await MakeNewCustomer();
 
-            if (success)
-                _io.Output.Write($"'{firstName} {lastName}' has been added to the database.");
-            else
-                _io.Output.Write($"ERROR: Failed to write customer '{firstName} {lastName}' to the database");
+            if (customer == null)
+                return;
+
+            _io.Output.Write("Adding customer...");
+            await repo.CreateCustomerAsync(customer);
+            _io.Output.Write($"'{customer}' has been added to the database.");
+        }
+
+        private async Task<INewCustomer> MakeNewCustomer()
+        {
+            INewCustomer newCustomer = null;
+            string firstName, lastName;
+            bool tryAgain;
+            do
+            {
+                tryAgain = false;
+
+                _io.Output.Write("Enter their first name:");
+                firstName = _io.Input.ReadInput();
+                _io.Output.Write("Enter their last name:");
+                lastName = _io.Input.ReadInput();
+
+                if (string.IsNullOrWhiteSpace(firstName))
+                {
+                    _io.Output.Write("The first name cannot be empty.");
+                    await TryAgain("Try again with a new customer name", "Cancel adding customer", () => tryAgain = true);
+                }
+                else
+                    newCustomer = new NewCustomer(firstName, lastName);
+            }
+            while (tryAgain);
+
+            return newCustomer;
         }
 
         private async Task PlaceOrder()

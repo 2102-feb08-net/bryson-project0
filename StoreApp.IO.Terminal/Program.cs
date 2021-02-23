@@ -61,8 +61,8 @@ namespace StoreApp.IO.Terminal
             writer.WriteLine(e.StackTrace);
             writer.Flush();
 
-            io.Output.Write($"FATAL ERROR: {e.Message}");
-            io.Input.ReadInput();
+            Console.WriteLine($"FATAL ERROR: {e.Message}");
+            Console.ReadLine();
         }
     }
 }

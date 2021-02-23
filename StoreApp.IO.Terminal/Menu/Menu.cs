@@ -26,5 +26,13 @@ namespace StoreApp.IO.Terminal
             else
                 Environment.Exit(0);
         }
+
+        protected async Task TryAgain(string tryAgainText, string cancelText, Action tryAgain)
+        {
+            ResponseChoice response = new ResponseChoice(_io);
+            response.Options.Add(new ChoiceOption(tryAgainText, tryAgain));
+            response.Options.Add(new ChoiceOption(cancelText));
+            await response.ShowAndInvokeOptions();
+        }
     }
 }

@@ -66,7 +66,7 @@ namespace StoreApp.IO.Terminal
                 customer = await CustomerMenuHelper.LookUpCustomer(_io, _database);
 
                 if (customer is null)
-                    await TryAgain(() => tryAgain = true);
+                    await TryAgain("Try again with a different customer", "Cancel order", () => tryAgain = true);
             } while (tryAgain);
 
             return customer;
@@ -84,18 +84,10 @@ namespace StoreApp.IO.Terminal
                 location = await LocationMenuHelper.LookUpLocation(_io, _database);
 
                 if (location is null)
-                    await TryAgain(() => tryAgain = true);
+                    await TryAgain("Try again with a different location", "Cancel order", () => tryAgain = true);
             } while (tryAgain);
 
             return location;
-        }
-
-        private async Task TryAgain(Action tryAgain)
-        {
-            ResponseChoice response = new ResponseChoice(_io);
-            response.Options.Add(new ChoiceOption("Try again with a different value", tryAgain));
-            response.Options.Add(new ChoiceOption("Cancel order"));
-            await response.ShowAndInvokeOptions();
         }
 
         private async Task AddNewProductToOrder()

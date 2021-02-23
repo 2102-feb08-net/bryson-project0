@@ -49,7 +49,7 @@ namespace StoreApp.DataAccess.Repository
             if (string.IsNullOrWhiteSpace(nameQuery))
                 throw new ArgumentException("Search query cannot be empty or null");
 
-            var customers = await context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (!ReferenceEquals(c.LastName, null) && c.LastName.Contains(nameQuery))).ToListAsync();
+            var customers = await context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (!string.IsNullOrWhiteSpace(c.LastName) && c.LastName.Contains(nameQuery))).ToListAsync();
             return customers.Select(c => (Library.Model.ICustomer)new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
 
@@ -58,21 +58,19 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="firstName">The first name of the customer.</param>
         /// <param name="lastName">The last name of the customer.</param>
-        /// <returns>Returns whether it was successful in adding the customer to the database</returns>
-        public async Task<bool> TryCreateCustomerAsync(string firstName, string lastName)
+        public async Task CreateCustomerAsync(Library.Model.INewCustomer customer)
         {
             using var context = new DigitalStoreContext(Options);
 
-            bool lastNameIsEmpty = string.IsNullOrWhiteSpace(lastName);
+            bool lastNameIsEmpty = string.IsNullOrWhiteSpace(customer.LastName);
 
             await context.Customers.AddAsync(new Customer()
             {
-                FirstName = firstName.Trim(),
-                LastName = lastNameIsEmpty ? null : lastName.Trim()
-            }
-            );
+                FirstName = customer.FirstName,
+                LastName = lastNameIsEmpty ? null : customer.LastName
+            });
 
-            return await context.SaveChangesAsync() > 0;
+            await context.SaveChangesAsync();
         }
 
         private static IQueryable<Customer> GetCustomersFromName(DigitalStoreContext context, string firstName, string lastName)

@@ -4,12 +4,14 @@ using System.Text;
 
 namespace StoreApp.Library.Model
 {
-    public interface ICustomer : IIdentifiable
+    /// <summary>
+    /// A customer who can order make an order and has been added to the database.
+    /// </summary>
+    public interface ICustomer : INewCustomer
     {
-        string FirstName { get; }
-
-        string LastName { get; }
-
-        public string DisplayName() => $"{FirstName} {LastName}";
+        /// <summary>
+        /// The Id of the customer
+        /// </summary>
+        int Id { get; }
     }
 }

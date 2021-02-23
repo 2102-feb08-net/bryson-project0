@@ -19,6 +19,18 @@ namespace StoreApp.Library.Tests
         }
 
         [Fact]
+        public void Customer_WhiteSpaceFirstName_Fail()
+        {
+            // arrange
+
+            // act
+            static Customer CreateCustomer() => new Customer("   ", "Doe", 1);
+
+            // assert
+            Assert.Throws<ArgumentException>(CreateCustomer);
+        }
+
+        [Fact]
         public void Customer_NullLastName_Pass()
         {
             // arrange
@@ -36,12 +48,10 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-#pragma warning disable CA1806
-            static void createCustomer() => new Customer(null, "Doe", 1);
-#pragma warning restore CA1806
+            static Customer CreateCustomer() => new Customer(null, "Doe", 1);
 
             // assert
-            Assert.Throws<ArgumentNullException>(createCustomer);
+            Assert.Throws<ArgumentNullException>(CreateCustomer);
         }
     }
 }

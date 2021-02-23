@@ -29,7 +29,6 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="firstName">The first name of the customer.</param>
         /// <param name="lastName">The last name of the customer.</param>
-        /// <returns>Returns whether it was successful in adding the customer to the database</returns>
-        Task<bool> TryCreateCustomerAsync(string firstName, string lastName);
+        Task CreateCustomerAsync(Library.Model.INewCustomer customer);
     }
 }
