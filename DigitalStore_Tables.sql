@@ -132,4 +132,3 @@ SELECT * FROM Customer
 SELECT * FROM PurchaseOrder
 
 SELECT * FROM OrderLine
-

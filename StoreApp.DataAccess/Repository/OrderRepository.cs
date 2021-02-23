@@ -140,12 +140,12 @@ namespace StoreApp.DataAccess.Repository
             foreach (var purchase in purchaseOrders)
             {
                 ICustomer customer = new Library.Model.Customer(purchase.Customer.FirstName, purchase.Customer.LastName, purchase.CustomerId);
-                ILocation location = new Location()
-                {
-                    Name = purchase.StoreLocation.Name,
-                    Address = purchase.StoreLocation.Address.Print(),
-                    Id = purchase.StoreLocation.Id
-                };
+                ILocation location = new Location(
+                    name: purchase.StoreLocation.Name,
+                    address: purchase.StoreLocation.Address.Print(),
+                    inventory: new Dictionary<IProduct, int>(),
+                    id: purchase.StoreLocation.Id
+                );
 
                 Dictionary<IProduct, int> productQuantities = new Dictionary<IProduct, int>();
                 foreach (var line in purchase.OrderLines)

@@ -40,19 +40,5 @@ namespace StoreApp.DataAccess.Repository
             else
                 return null;
         }
-
-        /// <summary>
-        /// Searches the product database for products that contains a portion of the search query.
-        /// </summary>
-        /// <param name="searchQuery">Query to search for inside product names.</param>
-        /// <returns>Returns a list of products found.</returns>
-        public async Task<List<IProduct>> SearchForProducts(string searchQuery)
-        {
-            using var context = new DigitalStoreContext(Options);
-
-            var products = context.Products.Where(c => c.Name.Contains(searchQuery));
-
-            return await products.Select(p => (IProduct)new Library.Model.Product(p.Name, p.Category, p.UnitPrice, p.Id)).ToListAsync();
-        }
     }
 }

@@ -4,14 +4,29 @@ using System.Text;
 
 namespace StoreApp.Library.Model
 {
+    /// <summary>
+    /// A product that can be added to an order
+    /// </summary>
     public record Product : IProduct
     {
+        /// <summary>
+        /// The name of the product.
+        /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        /// The category of the product.
+        /// </summary>
         public string Category { get; }
 
+        /// <summary>
+        /// The unit price of the product in USD.
+        /// </summary>
         public decimal UnitPrice { get; }
 
+        /// <summary>
+        /// The ID of the product.
+        /// </summary>
         public int Id { get; }
 
         /// <summary>
@@ -41,12 +56,10 @@ namespace StoreApp.Library.Model
             if (id <= 0)
                 throw new ArgumentException(paramName: nameof(id), message: "The Product ID must be greater than 0.");
 
-            Name = name ?? throw new NullReferenceException();
+            Name = name;
 
-            Category = category ?? throw new NullReferenceException();
+            Category = category;
 
-            if (unitPrice < 0)
-                throw new ArgumentException("Price cannot be below 0.");
             UnitPrice = unitPrice;
 
             Id = id;

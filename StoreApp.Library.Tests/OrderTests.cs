@@ -11,12 +11,11 @@ namespace StoreApp.Library.Tests
 
         private readonly IProduct product = new Product(name: "Apple", category: "Food", unitPrice: 1.29m, id: 1);
 
-        private readonly ILocation location = new Location();
-
         [Fact]
         public void Order_Constructor_Success()
         {
             // arrange
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>(), id: 1);
 
             // act
             Order order = new Order(customer, location);
@@ -29,6 +28,7 @@ namespace StoreApp.Library.Tests
         public void Order_NullCustomer_Fail()
         {
             // arrange
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>(), id: 1);
 
             // act
             Order constructor() => new Order(null, location);
@@ -56,7 +56,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddProductToOrder_Pass(int quantity)
         {
             // arrange
-            location.Inventory.Add(product, quantity);
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { product, quantity } }, id: 1);
             Order order = new Order(customer, location);
 
             // act
@@ -73,7 +73,7 @@ namespace StoreApp.Library.Tests
         public void Order_ShoppingCartQuantityEqualsAddProductToOrder_Pass(int quantity)
         {
             // arrange
-            location.Inventory.Add(product, quantity);
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { product, quantity } }, id: 1);
             Order order = new Order(customer, location);
             order.TryAddProductToOrder(product, quantity);
 
@@ -91,7 +91,7 @@ namespace StoreApp.Library.Tests
         public void Order_InsufficientStockInLocation_Fail(int quantity)
         {
             // arrange
-            location.Inventory.Add(product, quantity - 1);
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { product, quantity - 1 } }, id: 1);
             Order order = new Order(customer, location);
 
             // act
@@ -107,7 +107,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddProductQuantityLessThanOne_Fail(int quantity)
         {
             // arrange
-            location.Inventory.Add(product, quantity);
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { product, quantity } }, id: 1);
             Order order = new Order(customer, location);
 
             // act
@@ -122,7 +122,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddExcessiveProductQuantity_Fail(int quantity)
         {
             // arrange
-            location.Inventory.Add(product, quantity);
+            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { product, quantity } }, id: 1);
             Order order = new Order(customer, location);
 
             // act

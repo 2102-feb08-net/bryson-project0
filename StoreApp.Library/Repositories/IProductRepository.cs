@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.DataAccess.Repository
 {
+    /// <summary>
+    /// Repository for manipulation of Product data
+    /// </summary>
     public interface IProductRepository
     {
         /// <summary>
@@ -12,7 +15,5 @@ namespace StoreApp.DataAccess.Repository
         /// <param name="name">The name of the product.</param>
         /// <returns>Returns a single product with the specified name.</returns>
         Task<IProduct> LookupProductFromName(string name);
-
-        Task<List<IProduct>> SearchForProducts(string searchQuery);
     }
 }

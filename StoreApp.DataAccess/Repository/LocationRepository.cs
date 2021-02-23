@@ -46,13 +46,12 @@ namespace StoreApp.DataAccess.Repository
 
             var inventoryDictionary = inventoryPairs.ToDictionary((keyItem) => (keyItem).Key, (valueItem) => valueItem.Value);
 
-            Library.Model.ILocation location = new Library.Model.Location()
-            {
-                Name = storeLocation.Name,
-                Address = storeLocation.Address.Print(),
-                Inventory = inventoryDictionary,
-                Id = storeLocation.Id
-            };
+            Library.Model.ILocation location = new Library.Model.Location(
+                name: storeLocation.Name,
+                address: storeLocation.Address.Print(),
+                inventory: inventoryDictionary,
+                id: storeLocation.Id
+            );
 
             return location;
         }

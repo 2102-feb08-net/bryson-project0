@@ -6,15 +6,34 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library.Model
 {
+    /// <summary>
+    /// An order than has already been processed and entered into the database.
+    /// </summary>
     public class ProcessedOrder : IReadOnlyOrder
     {
+        /// <summary>
+        /// The customer who made the order.
+        /// </summary>
         public ICustomer Customer { get; }
 
+        /// <summary>
+        /// The location that the order was placed from.
+        /// </summary>
         public ILocation StoreLocation { get; }
 
+        /// <summary>
+        /// The products in the order and their corresponding quantities.
+        /// </summary>
         public IReadOnlyDictionary<IProduct, int> ShoppingCartQuantity { get; }
 
+        /// <summary>
+        /// The time the order was proccessed.
+        /// </summary>
         public DateTimeOffset? OrderTime { get; }
+
+        /// <summary>
+        /// The ID of the order. It cannot be null on a processed order.
+        /// </summary>
         public int? Id { get; }
 
         /// <summary>
@@ -27,9 +46,15 @@ namespace StoreApp.Library.Model
         /// <param name="id">The order number id</param>
         public ProcessedOrder(ICustomer customer, ILocation storeLocation, IDictionary<IProduct, int> productQuantities, DateTimeOffset orderTime, int id)
         {
-            Customer = customer;
-            StoreLocation = storeLocation;
-            ShoppingCartQuantity = (IReadOnlyDictionary<IProduct, int>)productQuantities;
+            if (orderTime > DateTime.Now)
+                throw new ArgumentException(paramName: nameof(orderTime), message: "Order time cannot be in the future.");
+
+            if (id <= 0)
+                throw new ArgumentException(paramName: nameof(id), message: "ID must be greater than 0.");
+
+            Customer = customer ?? throw new ArgumentNullException(nameof(customer));
+            StoreLocation = storeLocation ?? throw new ArgumentNullException(nameof(storeLocation));
+            ShoppingCartQuantity = (IReadOnlyDictionary<IProduct, int>)productQuantities ?? throw new ArgumentNullException(nameof(productQuantities));
             OrderTime = orderTime;
             Id = id;
         }

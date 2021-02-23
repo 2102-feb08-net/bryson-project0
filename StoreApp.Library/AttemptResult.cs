@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Library
 {
+    /// <summary>
+    /// Essentially a boolean, but can also return a message when false (which is called Fail in this class)
+    /// </summary>
     public class AttemptResult
     {
         /// <summary>
