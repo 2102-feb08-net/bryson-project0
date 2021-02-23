@@ -13,5 +13,7 @@ namespace StoreApp.Library.Model
         string Category { get; }
 
         decimal UnitPrice { get; }
+
+        int Id { get; }
     }
 }

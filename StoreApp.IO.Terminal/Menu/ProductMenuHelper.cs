@@ -11,6 +11,12 @@ namespace StoreApp.IO.Terminal
 {
     public static class ProductMenuHelper
     {
+        /// <summary>
+        /// A helper method to ask for a name of a product and look it up in the database.
+        /// </summary>
+        /// <param name="io">IO controller to output and input text.</param>
+        /// <param name="database">The main database.</param>
+        /// <returns>Returns a product as a result of the look up. May be null if not found.</returns>
         public static async Task<IProduct> LookUpProductAsync(IIOController io, MainDatabase database)
         {
             io.Output.Write("Enter the name of the product:");

@@ -42,7 +42,7 @@ CREATE TABLE Inventory (
 --DROP TABLE Customer
 CREATE TABLE Customer (
 	Id INT NOT NULL IDENTITY PRIMARY KEY,
-	FirstName NVARCHAR(100) NOT NULL,
+	FirstName NVARCHAR(100) NOT NULL CHECK(LEN(FirstName) > 1),
 	LastName NVARCHAR(100) NULL,
 	--AddressId INT NOT NULL,
 );
@@ -63,6 +63,7 @@ CREATE TABLE OrderLine (
 	Id INT NOT NULL IDENTITY PRIMARY KEY,
 	PurchaseOrderId INT NOT NULL,
 	ProductId INT NOT NULL,
+	PurchaseUnitPrice MONEY NOT NULL,
 	Quantity INT NOT NULL
 	FOREIGN KEY (ProductId) REFERENCES Product(Id),
 	FOREIGN KEY (PurchaseOrderId) REFERENCES PurchaseOrder(Id)

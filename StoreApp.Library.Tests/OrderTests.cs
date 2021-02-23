@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using StoreApp.Library.Model;
+using System.Collections.Generic;
 
 namespace StoreApp.Library.Tests
 {
@@ -8,7 +9,7 @@ namespace StoreApp.Library.Tests
     {
         private readonly ICustomer customer = new Customer(firstName: "John", lastName: "Doe", id: 1);
 
-        private readonly IProduct product = new ProductData(name: "Apple", category: "Food", unitPrice: 1.29m);
+        private readonly IProduct product = new Product(name: "Apple", category: "Food", unitPrice: 1.29m, id: 1);
 
         private readonly ILocation location = new Location();
 
@@ -55,15 +56,49 @@ namespace StoreApp.Library.Tests
         public void Order_AddProductToOrder_Pass(int quantity)
         {
             // arrange
+            location.Inventory.Add(product, quantity);
             Order order = new Order(customer, location);
 
             // act
             bool success = order.TryAddProductToOrder(product, quantity);
 
+            // assert
+            Assert.True(success);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(Order.MIN_QUANTITY_PER_ORDER)]
+        [InlineData(Order.MAX_QUANTITY_PER_ORDER)]
+        public void Order_ShoppingCartQuantityEqualsAddProductToOrder_Pass(int quantity)
+        {
+            // arrange
+            location.Inventory.Add(product, quantity);
+            Order order = new Order(customer, location);
+            order.TryAddProductToOrder(product, quantity);
+
+            // act
             bool foundOrder = order.ShoppingCartQuantity.TryGetValue(product, out int quantityAdded);
 
             // assert
-            Assert.True(success && foundOrder && quantity == quantityAdded);
+            Assert.True(foundOrder && quantity == quantityAdded);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(Order.MIN_QUANTITY_PER_ORDER)]
+        [InlineData(Order.MAX_QUANTITY_PER_ORDER)]
+        public void Order_InsufficientStockInLocation_Fail(int quantity)
+        {
+            // arrange
+            location.Inventory.Add(product, quantity - 1);
+            Order order = new Order(customer, location);
+
+            // act
+            bool success = order.TryAddProductToOrder(product, quantity);
+
+            // assert
+            Assert.False(success);
         }
 
         [Theory]
@@ -72,6 +107,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddProductQuantityLessThanOne_Fail(int quantity)
         {
             // arrange
+            location.Inventory.Add(product, quantity);
             Order order = new Order(customer, location);
 
             // act
@@ -86,6 +122,7 @@ namespace StoreApp.Library.Tests
         public void Order_AddExcessiveProductQuantity_Fail(int quantity)
         {
             // arrange
+            location.Inventory.Add(product, quantity);
             Order order = new Order(customer, location);
 
             // act

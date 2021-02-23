@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.DataAccess.Repository
 {
+    /// <summary>
+    /// Repository for manipulation of Customer data
+    /// </summary>
     public interface ICustomerRepository
     {
         /// <summary>

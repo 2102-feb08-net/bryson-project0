@@ -14,7 +14,7 @@ namespace StoreApp.IO.Terminal
         {
             StringBuilder sb = new StringBuilder();
 
-            string stateDisplay = order.Id != null && order.OrderTime != null ? $"{order.OrderTime} | Order# {order.Id}" : "Order In Progress";
+            string stateDisplay = order.Id is not null && order.OrderTime is not null ? $"{order.OrderTime} | Order# {order.Id}" : "Order In Progress";
             string customer = order?.Customer?.DisplayName() ?? "Missing Customer";
             string location = order?.StoreLocation?.Name ?? "No Location Set";
 

@@ -21,7 +21,7 @@ namespace StoreApp.IO.Terminal
 
         protected void ReturnToPreviousMenu()
         {
-            if (_previousMenu != null)
+            if (_previousMenu is not null)
                 _previousMenu.Open();
             else
                 Environment.Exit(0);

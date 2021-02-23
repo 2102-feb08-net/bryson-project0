@@ -34,10 +34,10 @@ namespace StoreApp.DataAccess.Repository
             if (order.ShoppingCartQuantity.Count == 0)
                 throw new OrderException("Cannot submit order with no products in cart.");
 
-            var productNames = order.ShoppingCartQuantity.Keys.Select(s => s.Name).ToList();
-            var foundProducts = await context.Products.Where(p => productNames.Contains(p.Name)).ToListAsync();
+            var productIds = order.ShoppingCartQuantity.Keys.Select(s => s.Id).ToList();
+            var foundProducts = await context.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
 
-            if (productNames.Count != foundProducts.Count)
+            if (productIds.Count != foundProducts.Count)
                 throw new OrderException("One or more Products in cart did not exist in the database.");
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
@@ -49,6 +49,15 @@ namespace StoreApp.DataAccess.Repository
                 StoreLocationId = order.StoreLocation.Id
             };
 
+            await AddProductsToOrder(order, context, foundProducts, purchaseOrder);
+
+            await context.PurchaseOrders.AddAsync(purchaseOrder);
+
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task AddProductsToOrder(IOrder order, DigitalStoreContext context, List<Product> foundProducts, PurchaseOrder purchaseOrder)
+        {
             var inventories = await context.Inventories
                 .Where(i => i.StoreId == purchaseOrder.StoreLocationId).ToListAsync();
 
@@ -76,20 +85,17 @@ namespace StoreApp.DataAccess.Repository
                 {
                     Quantity = quantity,
                     Product = foundProduct,
-                    PurchaseOrder = purchaseOrder
+                    PurchaseOrder = purchaseOrder,
+                    PurchaseUnitPrice = product.UnitPrice
                 });
             }
-
-            await context.PurchaseOrders.AddAsync(purchaseOrder);
-
-            await context.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Retrieves all of the orders from the specified customer..
+        /// Retrieves a list of all of the orders from the specified customer.
         /// </summary>
         /// <param name="customer"></param>
-        /// <returns>Returns a list of all orders found</returns>
+        /// <returns>Returns a list of all of the orders found</returns>
         public async Task<List<IReadOnlyOrder>> GetOrdersFromCustomer(Library.Model.ICustomer customer)
         {
             using var context = new DigitalStoreContext(Options);
@@ -107,6 +113,11 @@ namespace StoreApp.DataAccess.Repository
             return orderList;
         }
 
+        /// <summary>
+        /// Retrieves a list of all of the orders from a specified location.
+        /// </summary>
+        /// <param name="locationName">The name of the location.</param>
+        /// <returns>Returns a list of all of the orders found.</returns>
         public async Task<List<IReadOnlyOrder>> GetOrdersFromLocation(string locationName)
         {
             using var context = new DigitalStoreContext(Options);
@@ -139,7 +150,7 @@ namespace StoreApp.DataAccess.Repository
                 Dictionary<IProduct, int> productQuantities = new Dictionary<IProduct, int>();
                 foreach (var line in purchase.OrderLines)
                 {
-                    IProduct product = new ProductData(line.Product.Name, line.Product.Category, line.Product.UnitPrice);
+                    IProduct product = new Library.Model.Product(line.Product.Name, line.Product.Category, line.PurchaseUnitPrice, line.Product.Id);
                     productQuantities.Add(product, line.Quantity);
                 }
 

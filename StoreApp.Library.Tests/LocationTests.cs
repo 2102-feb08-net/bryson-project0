@@ -8,8 +8,8 @@ namespace StoreApp.Library.Tests
     {
         private readonly ILocation location = new Location();
 
-        private readonly IProduct apple = new ProductData(name: "Apple", category: "Food", unitPrice: 1.29m);
-        private readonly IProduct banana = new ProductData(name: "Banana", category: "Food", unitPrice: 0.79m);
+        private readonly IProduct apple = new Product(name: "Apple", category: "Food", unitPrice: 1.29m, id: 1);
+        private readonly IProduct banana = new Product(name: "Banana", category: "Food", unitPrice: 0.79m, id: 2);
 
         [Fact]
         public void Location_IsProductAvailable_Success()

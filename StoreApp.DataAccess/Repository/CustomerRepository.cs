@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StoreApp.DataAccess.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.DataAccess.Repository
 {
+    /// <summary>
+    /// Repository for manipulation of Customer data
+    /// </summary>
     public class CustomerRepository : BaseRepository, ICustomerRepository
     {
         /// <summary>
@@ -29,7 +31,7 @@ namespace StoreApp.DataAccess.Repository
         {
             using var context = new DigitalStoreContext(Options);
 
-            var query = CustomerQuery.GetCustomersFromName(context, firstName, lastName);
+            var query = GetCustomersFromName(context, firstName, lastName);
 
             var customers = await query.ToListAsync();
             return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
@@ -47,7 +49,7 @@ namespace StoreApp.DataAccess.Repository
             if (string.IsNullOrWhiteSpace(nameQuery))
                 throw new ArgumentException("Search query cannot be empty or null");
 
-            var customers = await context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (c.LastName != null && c.LastName.Contains(nameQuery))).ToListAsync();
+            var customers = await context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (!ReferenceEquals(c.LastName, null) && c.LastName.Contains(nameQuery))).ToListAsync();
             return customers.Select(c => (Library.Model.ICustomer)new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
         }
 
@@ -71,6 +73,15 @@ namespace StoreApp.DataAccess.Repository
             );
 
             return await context.SaveChangesAsync() > 0;
+        }
+
+        private static IQueryable<Customer> GetCustomersFromName(DigitalStoreContext context, string firstName, string lastName)
+        {
+            string trimmedFirst = firstName.Trim();
+            string trimmedLast = string.IsNullOrWhiteSpace(lastName) ? null : lastName.Trim();
+
+            var customerQuery = context.Customers.Where(c => c.FirstName == trimmedFirst && c.LastName == trimmedLast);
+            return customerQuery;
         }
     }
 }

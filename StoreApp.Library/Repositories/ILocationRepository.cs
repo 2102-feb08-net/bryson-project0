@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace StoreApp.DataAccess.Repository
 {
+    /// <summary>
+    /// Repository for manipulation of Location data
+    /// </summary>
     public interface ILocationRepository
     {
         /// <summary>

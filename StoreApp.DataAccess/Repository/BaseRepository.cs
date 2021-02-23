@@ -24,7 +24,7 @@ namespace StoreApp.DataAccess.Repository
             var optionsBuilder = new DbContextOptionsBuilder<T>()
                 .UseSqlServer(connectionString);
 
-            if (logger != null)
+            if (logger is not null)
                 optionsBuilder.LogTo(logger, Microsoft.Extensions.Logging.LogLevel.Information);
 
             return optionsBuilder.Options;

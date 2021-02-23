@@ -32,10 +32,10 @@ namespace StoreApp.IO.Terminal
 
         public async Task RunAsync()
         {
-            if (choiceAction != null)
+            if (choiceAction is not null)
                 await Task.Run(choiceAction);
 
-            if (choiceTask != null)
+            if (choiceTask is not null)
                 await choiceTask();
         }
     }

@@ -39,7 +39,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            void GetFail() => AttemptResult.Fail(null);
+            static void GetFail() => AttemptResult.Fail(null);
 
             // assert
             Assert.Throws<ArgumentNullException>(GetFail);
@@ -51,7 +51,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            void GetFail() => AttemptResult.Fail("      ");
+            static void GetFail() => AttemptResult.Fail("      ");
 
             // assert
             Assert.Throws<ArgumentException>(GetFail);

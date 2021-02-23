@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StoreApp.DataAccess.Repository
 {
+    /// <summary>
+    /// Repository for manipulation of Location data
+    /// </summary>
     public class LocationRepository : BaseRepository, ILocationRepository
     {
         /// <summary>
@@ -38,7 +41,7 @@ namespace StoreApp.DataAccess.Repository
 
             var inventoryPairs = storeLocation.Inventories.Select(
                 i => new KeyValuePair<Library.Model.IProduct, int>(
-                    new Library.Model.ProductData(i.Product.Name, i.Product.Category, i.Product.UnitPrice),
+                    new Library.Model.Product(i.Product.Name, i.Product.Category, i.Product.UnitPrice, i.ProductId),
                     i.Quantity)).ToList();
 
             var inventoryDictionary = inventoryPairs.ToDictionary((keyItem) => (keyItem).Key, (valueItem) => valueItem.Value);

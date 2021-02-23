@@ -1,0 +1,7 @@
+﻿[*.{cs,vb}]
+
+# IDE0041: Use 'is null' check
+dotnet_style_prefer_is_null_check_over_reference_equality_method = false:none
+
+# IDE0041: Use 'is null' check
+dotnet_diagnostic.IDE0041.severity = none

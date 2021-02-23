@@ -11,7 +11,6 @@ namespace StoreApp.IO.Terminal
         public IInputter Input { get; }
         public IOutputter Output { get; }
 
-
         public IOController(IInputter inputter, IOutputter outputter)
         {
             Input = inputter;
